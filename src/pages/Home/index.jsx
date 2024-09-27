@@ -7,11 +7,12 @@ import { FocusOn } from "@cloudinary/url-gen/qualifiers/focusOn"
 // import { gravity } from '@cloudinary/url-gen/qualifiers';
 import { getCldImg } from '../../utils/cloudinary';
 import { cld } from '../../utils/cloudinary';
-import { categories, featuredArtists, featuredArtworks } from '../../constants/data';
-
-
+import { featuredArtists, featuredArtworks } from '../../constants/data';
+import { useAppContext } from '../../contexts/AppContext';
+import { Link } from 'react-router-dom';
 
 function Home() {
+    const { categories } = useAppContext();
 
     // Use this sample image or upload your own via the Media Explorer
     const heroImage = cld.image('art-connect-hero')
@@ -23,25 +24,36 @@ function Home() {
     return (
         <div>
             {/* Hero Section */}
-            <section className="relative h-screen">
-                <AdvancedImage cldImg={heroImage} alt="Hero" className="w-full h-full object-cover" />
-                {/* <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            {/* <section className="relative h-screen">
+                <AdvancedImage cldImg={heroImage} alt="Hero" className="w-full h-full object-cover" /> */}
+            {/* <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                     <div className="text-center text-white">
                         <h1 className="text-5xl font-bold mb-4">Perfect eCommerce Webflow Template to Get Started</h1>
                         <button className="bg-white text-black px-6 py-2 rounded">Get Started</button>
                     </div>
                 </div> */}
+            {/* </section> */}
+
+            <section className="relative h-176 bg-cover bg-center flex items-center justify-center" style={{ backgroundImage: `url(${heroImage.toURL()})` }}>
+                <div className="bg-black bg-opacity-60 w-full h-full absolute top-0 left-0 z-10"></div>
+                <div className="z-20 text-center text-white">
+                    <h1 className="text-5xl font-bold mb-4 opacity-0 translate-y-10 transition-all duration-1000 ease-out animate-fadeInUp">
+                        Explore the Artists & Artworks
+                    </h1>
+                    <p className="text-xl opacity-0 translate-y-10 transition-all duration-1000 ease-out animate-fadeInUp animation-delay-500">
+                        A curated collection of fine artworks from various artists.
+                    </p>
+                </div>
             </section>
 
             {/* Categories */}
-            <section className="container mx-auto px-4 py-16 grid grid-cols-4 gap-4">
+            {/* Categories */}
+            <section className="container mx-auto px-4 py-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 {categories.map((category, index) => (
-                    <div className="bg-gray-900 text-white p-8 text-center">
+                    <Link key={index} to={`/shop/${category.code}`} className="bg-gray-900 text-white p-8 text-center hover:bg-gray-800 transition duration-300">
                         <h2 className="text-2xl">{category.name}</h2>
-                    </div>
+                    </Link>
                 ))}
-
-
             </section>
 
             {/* Featured Products */}

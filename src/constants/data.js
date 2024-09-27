@@ -83,7 +83,8 @@ export const artworks = [
         description: 'An abstract landscape painting with vivid sunset colors.',
         isFeatured: true,
         isMasterpiece: false,
-        artistId: 1
+        artistId: 1,
+        categoryId: 1
     },
     {
         id: 2,
@@ -93,7 +94,8 @@ export const artworks = [
         description: 'A flowing metal sculpture inspired by ocean waves.',
         isFeatured: true,
         isMasterpiece: false,
-        artistId: 2
+        artistId: 2,
+        categoryId: 2
     },
     {
         id: 3,
@@ -103,7 +105,8 @@ export const artworks = [
         description: 'A black and white photograph of city skyscrapers reflected in water.',
         isFeatured: true,
         isMasterpiece: false,
-        artistId: 3
+        artistId: 3,
+        categoryId: 3
     },
     {
         id: 4,
@@ -113,7 +116,8 @@ export const artworks = [
         description: 'A surreal digital composition blending nature and technology.',
         isFeatured: true,
         isMasterpiece: false,
-        artistId: 4
+        artistId: 4,
+        categoryId: 4
     },
     {
         id: 5,
@@ -123,7 +127,8 @@ export const artworks = [
         description: 'A mixed media piece exploring diverse cultural symbols.',
         isFeatured: true,
         isMasterpiece: false,
-        artistId: 5
+        artistId: 5,
+        categoryId: 1
     },
     {
         id: 6,
@@ -133,7 +138,8 @@ export const artworks = [
         description: 'A minimalist white-on-white painting of a winter landscape.',
         isFeatured: true,
         isMasterpiece: false,
-        artistId: 6
+        artistId: 6,
+        categoryId: 1
     },
     {
         id: 7,
@@ -143,7 +149,8 @@ export const artworks = [
         description: 'A vibrant digital artwork depicting a futuristic cityscape.',
         isFeatured: false,
         isMasterpiece: true,
-        artistId: 4
+        artistId: 4,
+        categoryId: 4
     },
     {
         id: 8,
@@ -153,7 +160,8 @@ export const artworks = [
         description: 'A series of interconnected bronze sculptures inspired by plant life.',
         isFeatured: false,
         isMasterpiece: true,
-        artistId: 2
+        artistId: 2,
+        categoryId: 2
     },
     {
         id: 9,
@@ -163,7 +171,8 @@ export const artworks = [
         description: 'An abstract painting exploring themes of memory and time.',
         isFeatured: false,
         isMasterpiece: true,
-        artistId: 1
+        artistId: 1,
+        categoryId: 1
     },
     {
         id: 10,
@@ -173,7 +182,8 @@ export const artworks = [
         description: 'A series of intimate photographs showcasing urban back streets.',
         isFeatured: false,
         isMasterpiece: true,
-        artistId: 3
+        artistId: 3,
+        categoryId: 3
     },
     {
         id: 11,
@@ -183,7 +193,8 @@ export const artworks = [
         description: 'A digital artwork of fantastical, glowing flowers.',
         isFeatured: false,
         isMasterpiece: true,
-        artistId: 6
+        artistId: 6,
+        categoryId: 4
     },
     {
         id: 12,
@@ -193,7 +204,8 @@ export const artworks = [
         description: 'A large-scale mixed media piece blending traditional and modern motifs.',
         isFeatured: false,
         isMasterpiece: true,
-        artistId: 5
+        artistId: 5,
+        categoryId: 1
     },
 ];
 

@@ -1,20 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { User, ShoppingCart, ChevronDown, Phone, Mail } from 'lucide-react';
 import { useAppContext } from '../../contexts/AppContext';
+import { useNavigate } from 'react-router-dom';
+
 const Navigation = () => {
 
-    const { user, cartItems, loginWithGoogle, logout } = useAppContext();
+    const { user, cartItems, loginWithGoogle, logout, categories } = useAppContext();
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const handleShopClick = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
+
+    const handleCategoryClick = (category) => {
+        setIsDropdownOpen(false);
+        navigate(category ? `/shop/${category.code}` : '/shop');
+    };
 
     return (
-        <header className="bg-white">
+        <header className="bg-white relative z-50">
             <div className="container mx-auto px-4 py-4">
                 <div className="flex justify-between items-center">
                     <Link to="/" className="text-3xl font-bold italic">ArtConnect</Link>
                     <div className="flex items-center space-x-6">
                         <div className="flex items-center">
                             <Phone className="w-4 h-4 mr-2" />
-                            <span>+1 (204) 800-0000</span>
+                            <span>+1 (204) 456-0150</span>
                         </div>
                         <div className="flex items-center">
                             <Mail className="w-4 h-4 mr-2" />
@@ -50,11 +77,37 @@ const Navigation = () => {
                 <nav className="mt-4">
                     <ul className="flex space-x-8 justify-center font-poppins">
                         <li><Link to="/" className="text-gray-800 hover:text-black">Home</Link></li>
-                        <li className="relative group">
-                            <Link to="/shop" className="text-gray-800 hover:text-black flex items-center">
+                        <li className="relative group" ref={dropdownRef}>
+                            <button
+                                onClick={handleShopClick}
+                                className="text-gray-800 hover:text-black flex items-center"
+                            >
                                 Shop
                                 <ChevronDown className="w-4 h-4 ml-1" />
-                            </Link>
+                            </button>
+                            {isDropdownOpen && (
+                                <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                    <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                        <button
+                                            onClick={() => handleCategoryClick()}
+                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                                            role="menuitem"
+                                        >
+                                            All
+                                        </button>
+                                        {categories.map((category) => (
+                                            <button
+                                                key={category.id}
+                                                onClick={() => handleCategoryClick(category)}
+                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                                                role="menuitem"
+                                            >
+                                                {category.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </li>
                         <li><Link to="/gallery" className="text-gray-800 hover:text-black">Gallery</Link></li>
                         <li><Link to="/artists" className="text-gray-800 hover:text-black">Artists</Link></li>

@@ -9,6 +9,25 @@ import Artists from './pages/Artists';
 import './App.css';
 import { AppProvider } from './contexts/AppContext';
 
+const Main = () => {
+
+
+  return (
+    <main className="flex-grow">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/shop/:category" element={<Shop />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/artists" element={<Artists />} />
+        {/* <Route path="/gallery" element={<Gallery />} />
+  <Route path="/artists" element={<Artists />} />
+   */}
+      </Routes>
+    </main>
+  );
+}
 function App() {
 
   return (
@@ -33,18 +52,7 @@ function App() {
       <Router>
         <div className="App min-h-screen flex flex-col">
           <Navigation />
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/shop" element={<Shop />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/gallery" element={<Gallery />} />
-              <Route path="/artists" element={<Artists />} />
-              {/* <Route path="/gallery" element={<Gallery />} />
-          <Route path="/artists" element={<Artists />} />
-           */}
-            </Routes>
-          </main>
+          <Main />
           <Footer />
         </div>
       </Router>
