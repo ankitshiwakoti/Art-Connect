@@ -1,21 +1,18 @@
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import { Account, Databases, Client } from 'appwrite';
-
+import { AppConfig } from '../../constants/config';
+import { Cloudinary } from "@cloudinary/url-gen";
 const AppContext = createContext();
 
 export const useAppContext = () => useContext(AppContext);
 
-const AppConfig = {
-    endpoint: 'https://cloud.appwrite.io/v1',
-    project: '66f6063c00080b6b7fd2',
-    databaseId: '',
-    productsCollectionId: '66db29840027eb3bc43d',
-    cartItemsCollectionId: '66db2bc7002a0572d169',
-}
+
 
 export const AppProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [cartItems, setCartItems] = useState([]);
+    //const [cld, setCld] = useState(null);
+
 
     const client = new Client()
         .setEndpoint(AppConfig.endpoint)
@@ -24,8 +21,12 @@ export const AppProvider = ({ children }) => {
     const account = new Account(client);
     const databases = new Databases(client);
 
+    //const cld = new Cloudinary({ cloud: { cloudName: 'dqaidz667' } });
+
     useEffect(() => {
+
         checkUser();
+        //setCld(new Cloudinary({ cloud: { cloudName: 'dqaidz667' } }));
         //subscribeToCart();
     }, []);
 
@@ -80,6 +81,7 @@ export const AppProvider = ({ children }) => {
     const value = {
         user,
         cartItems,
+        //cld,
         loginWithGoogle,
         logout,
         fetchCartItems,

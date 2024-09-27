@@ -6,7 +6,9 @@ import Shop from './pages/Shop';
 import Contact from './pages/Contact';
 import './App.css';
 import { AppProvider } from './contexts/AppContext';
+
 function App() {
+
   return (
     // <div className="App">
     //   <header className="App-header">
