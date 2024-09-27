@@ -1,10 +1,11 @@
-import logo from './logo.svg';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import Home from './pages/Home';
+import Shop from './pages/Shop';
+import Contact from './pages/Contact';
 import './App.css';
-
+import { AppProvider } from './contexts/AppContext';
 function App() {
   return (
     // <div className="App">
@@ -24,19 +25,24 @@ function App() {
     //   </header>
     // </div>
 
-    <Router>
-      <div className="App">
-        <Navigation />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          {/* <Route path="/gallery" element={<Gallery />} />
+    <AppProvider>
+      <Router>
+        <div className="App min-h-screen flex flex-col">
+          <Navigation />
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/contact" element={<Contact />} />
+              {/* <Route path="/gallery" element={<Gallery />} />
           <Route path="/artists" element={<Artists />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/contact" element={<Contact />} /> */}
-        </Routes>
-        <Footer />
-      </div>
-    </Router>
+           */}
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </Router>
+    </AppProvider>
   );
 }
 
