@@ -4,10 +4,10 @@ import { auto, scale, crop } from '@cloudinary/url-gen/actions/resize';
 import { autoGravity, focusOn } from '@cloudinary/url-gen/qualifiers/gravity';
 import { AdvancedImage } from '@cloudinary/react';
 import { FocusOn } from "@cloudinary/url-gen/qualifiers/focusOn"
-import { products, artists } from '../../constants/data';
 // import { gravity } from '@cloudinary/url-gen/qualifiers';
 import { getCldImg } from '../../utils/cloudinary';
 import { cld } from '../../utils/cloudinary';
+import { categories, featuredArtists, featuredArtworks } from '../../constants/data';
 
 
 
@@ -35,18 +35,13 @@ function Home() {
 
             {/* Categories */}
             <section className="container mx-auto px-4 py-16 grid grid-cols-4 gap-4">
-                <div className="bg-gray-900 text-white p-8 text-center">
-                    <h2 className="text-2xl">Paintings</h2>
-                </div>
-                <div className="bg-gray-900 text-white p-8 text-center">
-                    <h2 className="text-2xl">Abstract Art</h2>
-                </div>
-                <div className="bg-gray-900 text-white p-8 text-center">
-                    <h2 className="text-2xl">Oil Paintings</h2>
-                </div>
-                <div className="bg-gray-900 text-white p-8 text-center">
-                    <h2 className="text-2xl">Landscapes</h2>
-                </div>
+                {categories.map((category, index) => (
+                    <div className="bg-gray-900 text-white p-8 text-center">
+                        <h2 className="text-2xl">{category.name}</h2>
+                    </div>
+                ))}
+
+
             </section>
 
             {/* Featured Products */}
@@ -54,11 +49,11 @@ function Home() {
                 <h2 className="text-3xl font-bold text-center mb-2">Featured Artworks</h2>
                 <div className="bg-black w-12 h-px mx-auto mt-5 mb-8"></div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {products.map((product, index) => (
+                    {featuredArtworks.map((artwork, index) => (
                         <div key={index} className="text-center">
-                            <AdvancedImage cldImg={getCldImg(product.imageId)} alt={product.name} className="w-full h-96 object-cover mb-4" />
-                            <h3 className="text-xl font-semibold">{product.name}</h3>
-                            <p className="text-gray-600">{product.price}</p>
+                            <AdvancedImage cldImg={getCldImg(artwork.imageId)} alt={artwork.name} className="w-full h-96 object-cover mb-4" />
+                            <h3 className="text-xl font-semibold">{artwork.name}</h3>
+                            <p className="text-gray-600">${parseFloat(artwork.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</p>
                         </div>
                     ))}
                 </div>
@@ -69,10 +64,10 @@ function Home() {
                 <h2 className="text-3xl font-bold text-center mb-2">Featured Artists</h2>
                 <div className="bg-black w-12 h-px mx-auto mt-5 mb-8"></div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {artists.map((product, index) => (
+                    {featuredArtists.map((artist, index) => (
                         <div key={index} className="text-center">
-                            <AdvancedImage cldImg={getCldImg(product.imageId)} alt={product.name} className="w-full h-96 object-cover mb-4" />
-                            <h3 className="text-xl font-semibold">{product.name}</h3>
+                            <AdvancedImage cldImg={getCldImg(artist.masterpieceImageId)} alt={artist.name} className="w-full h-96 object-cover mb-4" />
+                            <h3 className="text-xl font-semibold">{artist.name}</h3>
                         </div>
                     ))}
                 </div>
