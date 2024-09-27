@@ -56,6 +56,8 @@ const Navigation = () => {
                                 <ChevronDown className="w-4 h-4 ml-1" />
                             </Link>
                         </li>
+                        <li><Link to="/gallery" className="text-gray-800 hover:text-black">Gallery</Link></li>
+                        <li><Link to="/artists" className="text-gray-800 hover:text-black">Artists</Link></li>
                         <li><Link to="/contact" className="text-gray-800 hover:text-black">Contact</Link></li>
                     </ul>
                 </nav>

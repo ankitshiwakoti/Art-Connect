@@ -4,6 +4,8 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Shop from './pages/Shop';
 import Contact from './pages/Contact';
+import Gallery from './pages/Gallery';
+import Artists from './pages/Artists';
 import './App.css';
 import { AppProvider } from './contexts/AppContext';
 
@@ -36,6 +38,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/shop" element={<Shop />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/gallery" element={<Gallery />} />
+              <Route path="/artists" element={<Artists />} />
               {/* <Route path="/gallery" element={<Gallery />} />
           <Route path="/artists" element={<Artists />} />
            */}
