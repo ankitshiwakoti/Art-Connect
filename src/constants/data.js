@@ -210,6 +210,14 @@ export const artworks = [
 ];
 
 
+export const setCategory = (artwork) => {
+    const category = categories.find(category => category.id === artwork.categoryId);
+    return {
+        ...artwork,
+        category: category
+    }
+}
+
 export const featuredArtworks = artworks.filter(artwork => artwork.isFeatured);
 
 export const featuredArtists = artists.filter(artist => artist.isFeatured && artworks.find(artwork => artwork.artistId === artist.id && artwork.isMasterpiece)).map(artist => {
@@ -217,6 +225,25 @@ export const featuredArtists = artists.filter(artist => artist.isFeatured && art
     return {
         ...artist,
         masterpieceImageId: artwork.imageId,
-        artwork: artwork
+        artwork: setCategory(artwork)
     }
 });
+
+export const allArtistsWithMasterpiece = artists.map(artist => {
+    const artwork = artworks.find(artwork => artwork.artistId === artist.id && artwork.isMasterpiece);
+    return {
+        ...artist,
+        masterpieceImageId: artwork.imageId,
+        artwork: setCategory(artwork)
+    }
+});
+
+export const getArtistWithArtworksById = (id) => {
+    const artist = artists.find(artist => artist.id === id);
+    return {
+        ...artist,
+        artworks: artworks.filter(artwork => artwork.artistId === id).map(artwork => setCategory(artwork))
+    }
+}
+
+
