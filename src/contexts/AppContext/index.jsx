@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import { Account, Databases, Client } from 'appwrite';
 import { AppConfig } from '../../constants/config';
-import { Cloudinary } from "@cloudinary/url-gen";
+//import { Cloudinary } from "@cloudinary/url-gen";
 import { categories as categoriesData } from '../../constants/data';
 const AppContext = createContext();
 
@@ -11,7 +11,7 @@ export const useAppContext = () => useContext(AppContext);
 
 export const AppProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [cartItems, setCartItems] = useState([]);
+    const [cartItems, setCartItems] = useState([{}]);
     const [categories, setCategories] = useState(categoriesData);
     //const [cld, setCld] = useState(null);
 
@@ -25,13 +25,6 @@ export const AppProvider = ({ children }) => {
 
     //const cld = new Cloudinary({ cloud: { cloudName: 'dqaidz667' } });
 
-    useEffect(() => {
-
-        checkUser();
-        //setCld(new Cloudinary({ cloud: { cloudName: 'dqaidz667' } }));
-        //subscribeToCart();
-    }, []);
-
     const checkUser = useCallback(async () => {
         try {
             const session = await account.get();
@@ -40,6 +33,15 @@ export const AppProvider = ({ children }) => {
             console.error('User not logged in', error);
         }
     }, []);
+
+    useEffect(() => {
+
+        checkUser();
+        //setCld(new Cloudinary({ cloud: { cloudName: 'dqaidz667' } }));
+        //subscribeToCart();
+    }, [checkUser]);
+
+    
 
     const loginWithGoogle = async () => {
         try {

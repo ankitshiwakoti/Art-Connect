@@ -1,9 +1,8 @@
 import React from 'react';
-import { Cloudinary } from '@cloudinary/url-gen';
-import { auto, scale, crop } from '@cloudinary/url-gen/actions/resize';
-import { autoGravity, focusOn } from '@cloudinary/url-gen/qualifiers/gravity';
+import { auto } from '@cloudinary/url-gen/actions/resize';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
 import { AdvancedImage } from '@cloudinary/react';
-import { FocusOn } from "@cloudinary/url-gen/qualifiers/focusOn"
+// import { FocusOn } from "@cloudinary/url-gen/qualifiers/focusOn"
 // import { gravity } from '@cloudinary/url-gen/qualifiers';
 import { getCldImg } from '../../utils/cloudinary';
 import { cld } from '../../utils/cloudinary';
@@ -62,8 +61,10 @@ function Home() {
                 <div className="bg-black w-12 h-px mx-auto mt-5 mb-8"></div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {featuredArtworks.map((artwork, index) => (
-                        <div key={index} className="text-center">
-                            <AdvancedImage cldImg={getCldImg(artwork.imageId)} alt={artwork.name} className="w-full h-96 object-cover mb-4" />
+                        <div key={index} className="text-center group">
+                            <div className="overflow-hidden">
+                                <AdvancedImage cldImg={getCldImg(artwork.imageId)} alt={artwork.name} className="w-full h-96 object-cover transform transition duration-300 group-hover:scale-105" />
+                            </div>
                             <h3 className="text-xl font-semibold">{artwork.name}</h3>
                             <p className="text-gray-600">${parseFloat(artwork.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</p>
                         </div>
@@ -77,8 +78,11 @@ function Home() {
                 <div className="bg-black w-12 h-px mx-auto mt-5 mb-8"></div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {featuredArtists.map((artist, index) => (
-                        <div key={index} className="text-center">
-                            <AdvancedImage cldImg={getCldImg(artist.masterpieceImageId)} alt={artist.name} className="w-full h-96 object-cover mb-4" />
+                        <div key={index} className="text-center group">
+                            <div className="overflow-hidden">
+
+                                <AdvancedImage cldImg={getCldImg(artist.masterpieceImageId)} alt={artist.name} className="w-full h-96 object-cover object-cover transform transition duration-300 group-hover:scale-105" />
+                            </div>
                             <h3 className="text-xl font-semibold">{artist.name}</h3>
                         </div>
                     ))}
