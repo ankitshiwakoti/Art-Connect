@@ -10,15 +10,15 @@ import { Link, useParams } from 'react-router-dom';
 const ProductGrid = ({ filteredArtworks }) => {
 
     return (
-        <div className="w-full md:w-3/4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+        <div className="w-full md:w-3/4 grid grid-cols-1 md:grid-cols-1 xl:grid-cols-2 gap-8">
             {filteredArtworks.map((artwork) => (
-                <div key={artwork.id} className="bg-white p-4 group">
+                <Link to={`/artwork/${artwork.$id}`} key={artwork.$id} className="bg-white p-4 group">
                     <div className="overflow-hidden">
-                        <AdvancedImage cldImg={getCldImg(artwork.imageId)} alt={artwork.name} className="w-full h-96 object-cover transform transition duration-300 group-hover:scale-105" />
+                        <AdvancedImage cldImg={getCldImg(artwork.imageId)} alt={artwork.name} className="w-full h-128 object-cover transform transition duration-300 group-hover:scale-105" />
                     </div>
-                    <h3 className="text-lg font-semibold mb-2">{artwork.name}</h3>
+                    <h3 className="text-lg font-semibold">{artwork.name}</h3>
                     <p className="text-gray-600">${parseFloat(artwork.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</p>
-                </div>
+                </Link>
             ))}
         </div>
     );
