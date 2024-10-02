@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { getCldImg } from '../../utils/cloudinary';
 import { useAppContext } from '../../contexts/AppContext';
 import Title from '../../components/Title';
 import { Gallery, Item } from 'react-photoswipe-gallery';
 import 'photoswipe/dist/photoswipe.css';
+import { Link, useParams } from 'react-router-dom';
+
 
 function Artwork() {
     const { id } = useParams();
@@ -75,10 +76,12 @@ function Artwork() {
                         </Gallery>
                     </div>
                     <div className="md:w-1/2 md:pl-16 text-left">
+                        <Link
+                            to={`/shop/${artwork.category.code}`}
+                            className="text-gray-600 mb-6">{artwork.category.name}</Link>
                         <h2 className="text-3xl font-bold mb-4">{artwork.name}</h2>
-                        <p className="text-2xl font-semibold mb-4">${artwork.price.toFixed(2)} USD</p>
+                        <p className="text-2xl font-semibold mb-4">${parseFloat(artwork.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</p>
                         <p className="text-gray-600 mb-6">{artwork.description}</p>
-                        <p className="mb-4">Dimensions: {artwork.dimensions}</p>
                         <div className="mb-6">
                             <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-2">
                                 Quantity

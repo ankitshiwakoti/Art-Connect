@@ -1,14 +1,18 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import { AdvancedImage } from '@cloudinary/react';
-import { products, artists } from '../../constants/data';
 import { getCldImg } from '../../utils/cloudinary';
 import { cld } from '../../utils/cloudinary';
+import { useAppContext } from '../../contexts/AppContext';
 
 import { auto } from '@cloudinary/url-gen/actions/resize';
 import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
 
 function Artists() {
-    // Use this sample image or upload your own via the Media Explorer
+    const { artists } = useAppContext((context) => ({
+        artists: context.artistsState.value || [] // Fetching all artists
+    }));
+
     const heroImage = cld.image('art-connect-hero')
         .format('auto')
         .quality('auto')
@@ -25,33 +29,36 @@ function Artists() {
                 </div>
             </section>
 
-            {/* Artworks Section */}
-            <section className="container mx-auto px-4 py-16">
-                <h2 className="text-4xl font-bold text-center mb-8">Featured Artworks</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-                    {products.map((product, index) => (
-                        <div key={index} className="text-center group">
-                            <div className="overflow-hidden rounded-lg shadow-lg">
-                                <AdvancedImage cldImg={getCldImg(product.imageId)} alt={product.name} className="w-full h-72 object-cover transform transition duration-300 group-hover:scale-105" />
-                            </div>
-                            <h3 className="text-2xl font-semibold mt-4">{product.name}</h3>
-                            <p className="text-lg text-gray-600 mt-2">{product.price}</p>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
             {/* Artists Section */}
             <section className="container mx-auto px-4 py-16">
-                <h2 className="text-4xl font-bold text-center mb-8">Meet the Artists</h2>
+                <h2 className="text-4xl font-bold text-center mb-8">All Artists</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
                     {artists.map((artist, index) => (
-                        <div key={index} className="text-center group">
-                            <div className="overflow-hidden rounded-full w-48 h-48 mx-auto mb-4">
-                                <AdvancedImage cldImg={getCldImg(artist.imageId)} alt={artist.name} className="w-full h-full object-cover transform transition duration-300 group-hover:scale-105 rounded-full" />
+                        <div key={index} className="relative overflow-hidden rounded-lg transition duration-300 group">
+                            {/* Artist Masterpiece */}
+                            <Link to={`/Artists/${artist.$id}`}> {/* Link to the artist detail page */}
+                                <div className="overflow-hidden mb-4">
+                                    <AdvancedImage
+                                        cldImg={getCldImg(artist.masterpiece.imageId)} 
+                                        alt={artist.masterpiece.name} 
+                                        className="w-full h-72 object-cover transition duration-300 transform group-hover:scale-105" 
+                                    />
+                                </div>
+                            </Link>
+                            
+                            {/* Artist Profile Section */}
+                            <div className="flex items-center mt-2">
+                                <div className="w-12 h-12 rounded-full overflow-hidden">
+                                    <AdvancedImage 
+                                        cldImg={getCldImg(artist.pictureId)} 
+                                        alt={artist.name} 
+                                        className="w-full h-full object-cover" 
+                                    />
+                                </div>
+                                <div className="ml-2">
+                                    <h3 className="text-lg font-semibold">{artist.name}</h3>
+                                </div>
                             </div>
-                            <h3 className="text-2xl font-semibold">{artist.name}</h3>
-                            <p className="text-lg text-gray-500">{artist.description}</p>
                         </div>
                     ))}
                 </div>
