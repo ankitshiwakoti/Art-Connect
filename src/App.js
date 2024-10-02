@@ -7,6 +7,7 @@ import Contact from './pages/Contact';
 import Gallery from './pages/Gallery';
 import Artists from './pages/Artists';
 import Artwork from './pages/Artwork';
+import ArtistDetail from './pages/Artists/artistDetails';
 import './App.css';
 import { AppProvider, useAppContext } from './contexts/AppContext';
 import LoadingIndicator from './components/LoadingIndicator';
@@ -31,6 +32,7 @@ const MainContent = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/artists" element={<Artists />} />
+            <Route path="/artists/:artistId" element={<ArtistDetail />} />
           </Routes>
         </main>
         <Footer />
