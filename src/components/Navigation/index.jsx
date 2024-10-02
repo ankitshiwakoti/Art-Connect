@@ -71,7 +71,7 @@ const Navigation = () => {
                         {user ? (
                             <button
                                 onClick={logout}
-                                className="flex items-center text-gray-800 hover:text-black"
+                                className="flex items-center text-gray-800 hover:text-black "
                             >
                                 <User className="w-5 h-5 mr-2" />
                                 Logout
@@ -107,8 +107,10 @@ const Navigation = () => {
                     </div>
                 </div>
             </div>
-            {/* Mobile menu */}
-            <nav className={`md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'}`}>
+
+            {/* Mobile menu with animation */}
+            <nav className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                }`}>
                 <ul className="flex flex-col space-y-2 bg-white p-4">
                     <li><Link to="/" className={`font-semibold ${isActive('/') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Home</Link></li>
                     <li><Link to="/shop" className={`font-semibold ${isActive('/shop') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Shop</Link></li>
@@ -117,6 +119,7 @@ const Navigation = () => {
                     <li><Link to="/contact" className={`font-semibold ${isActive('/contact') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Contact</Link></li>
                 </ul>
             </nav>
+
             {/* Desktop menu */}
             <nav className="hidden md:block md:p-4">
                 <ul className="flex space-x-8 justify-center font-poppins">
