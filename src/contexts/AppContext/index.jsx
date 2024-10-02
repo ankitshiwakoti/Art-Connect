@@ -100,6 +100,22 @@ export const AppProvider = ({ children }) => {
         }
     };
 
+    const addToCart = (item) => {
+        setCartItems((prevItems) => [...prevItems, { ...item, quantity: 1 }]);
+    };
+
+    const removeFromCart = (itemId) => {
+        setCartItems((prevItems) => prevItems.filter((item) => item.$id !== itemId));
+    };
+
+    const updateQuantity = (itemId, quantity) => {
+        setCartItems((prevItems) =>
+            prevItems.map((item) =>
+                item.$id === itemId ? { ...item, quantity } : item
+            )
+        );
+    };
+
     const globalLoading = useMemo(() =>
         checkUserState.loading ||
         categoriesState.loading ||
@@ -117,6 +133,9 @@ export const AppProvider = ({ children }) => {
         loginWithGoogle,
         logout,
         fetchCartItems,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
         globalLoading
     };
 

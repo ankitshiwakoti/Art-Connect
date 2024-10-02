@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { User, ShoppingCart, ChevronDown, Phone, Mail, Menu, X, Loader } from 'lucide-react';
+import { User, ShoppingCart as ShoppingCartIcon, ChevronDown, Phone, Mail, Menu, X, Loader } from 'lucide-react';
 import { useAppContext } from '../../contexts/AppContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToggle, useClickAway } from 'react-use';
+import ShoppingCart from '../ShoppingCart';
 
 const Navigation = () => {
     const {
@@ -27,6 +28,7 @@ const Navigation = () => {
     const [isDropdownOpen, toggleDropdown] = useToggle(false);
     const [isMobileMenuOpen, toggleMobileMenu] = useToggle(false);
     const [isLoginLoading, toggleLoginLoading] = useToggle(false);
+    const [isCartOpen, toggleCartOpen] = useToggle(false);
 
     const dropdownRef = React.useRef(null);
     useClickAway(dropdownRef, () => {
@@ -62,6 +64,8 @@ const Navigation = () => {
         }
     };
 
+    const cartIconRef = useRef(null);
+
     return (
         <header className="bg-white relative z-50">
             <div className="container mx-auto px-4 py-4">
@@ -90,13 +94,19 @@ const Navigation = () => {
                             <span className="ml-1">{user ? 'Logout' : 'Login'}</span>
                         </button>
                         <div className="relative">
-                            <ShoppingCart className="w-5 h-5" />
-                            {cartItems.length > 0 && (
-                                <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                                    {cartItems.length}
-                                </span>
-                            )}
+                            <div className="relative cursor-pointer" onClick={() => toggleCartOpen(true)}>
+                                <ShoppingCartIcon className="w-5 h-5" />
+                                {cartItems.length > 0 && (
+                                    <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                                        {cartItems.length}
+                                    </span>
+                                )}
+                            </div>
+                            <ShoppingCart isOpen={isCartOpen} onClose={() => {
+                                toggleCartOpen(false);
+                            }} anchorRef={cartIconRef} />
                         </div>
+
                         <button
                             className="md:hidden"
                             onClick={toggleMobileMenu}
@@ -107,6 +117,7 @@ const Navigation = () => {
                             ) : (
                                 <Menu className="w-6 h-6" />
                             )}
+
                         </button>
                     </div>
                 </div>
