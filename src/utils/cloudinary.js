@@ -15,5 +15,6 @@ export const getCldImg = (imageId, width, height) => {
     } else {
         img.resize(auto().gravity(autoGravity()))
     }
+
     return img;
 }
