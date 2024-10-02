@@ -1,7 +1,7 @@
-import React, { createContext, useState, useEffect, useContext, useCallback, useMemo } from 'react';
+import React, { createContext, useState, useContext, useMemo } from 'react';
 import { Account, Databases, Client, Query } from 'appwrite';
 import { AppConfig } from '../../constants/config';
-// Remove the import for categories from data.js
+import { useAsync } from 'react-use';
 
 const AppContext = createContext();
 
@@ -10,11 +10,6 @@ export const useAppContext = () => useContext(AppContext);
 export const AppProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [cartItems, setCartItems] = useState([{}]);
-    const [categories, setCategories] = useState([]); // Initialize as an empty array
-    const [isLoadingUser, setIsLoadingUser] = useState(true);
-    const [isLoadingCategories, setIsLoadingCategories] = useState(true);
-
-    const globalLoading = useMemo(() => isLoadingUser || isLoadingCategories, [isLoadingUser, isLoadingCategories]);
 
     const client = new Client()
         .setEndpoint(AppConfig.endpoint)
@@ -23,40 +18,27 @@ export const AppProvider = ({ children }) => {
     const account = new Account(client);
     const databases = new Databases(client);
 
-    const checkUser = useCallback(async () => {
-        setIsLoadingUser(true);
+    const checkUserState = useAsync(async () => {
         try {
             const session = await account.get();
             setUser(session);
         } catch (error) {
-            //console.error('User not logged in', error);
-        } finally {
-            setIsLoadingUser(false);
+            console.error('User not logged in', error);
         }
     }, []);
 
-    const fetchCategories = useCallback(async () => {
-        setIsLoadingCategories(true);
+    const categoriesState = useAsync(async () => {
         try {
             const response = await databases.listDocuments(
                 AppConfig.databaseId,
                 AppConfig.categoriesCollectionId,
                 [Query.orderAsc("sort")]
             );
-            setCategories(response.documents);
+            return response.documents;
         } catch (error) {
             console.error('Failed to fetch categories', error);
-        } finally {
-            setIsLoadingCategories(false);
         }
     }, []);
-
-    useEffect(() => {
-        checkUser();
-        fetchCategories();
-    }, [checkUser, fetchCategories]);
-
-    // ... rest of the code remains the same
 
     const loginWithGoogle = () => {
         try {
@@ -75,17 +57,6 @@ export const AppProvider = ({ children }) => {
         }
     };
 
-    const subscribeToCart = () => {
-        const unsubscribe = databases.subscribe(AppConfig.databaseId, AppConfig.cartItemsCollectionId, (response) => {
-            if (response.events.includes('databases.*.collections.*.documents.*')) {
-                // Update cart items when there's a change
-                fetchCartItems();
-            }
-        });
-
-        return unsubscribe;
-    };
-
     const fetchCartItems = async () => {
         try {
             const response = await databases.listDocuments(AppConfig.databaseId, AppConfig.cartItemsCollectionId);
@@ -95,16 +66,16 @@ export const AppProvider = ({ children }) => {
         }
     };
 
+    const globalLoading = useMemo(() => checkUserState.loading || categoriesState.loading, [checkUserState.loading, categoriesState.loading]);
+
     const value = {
         user,
         cartItems,
-        categories,
+        categories: categoriesState.value || [],
         loginWithGoogle,
         logout,
         fetchCartItems,
-        setCategories,
-        isLoadingUser,
-        setIsLoadingUser,
+        isLoadingUser: checkUserState.loading,
         globalLoading
     };
 

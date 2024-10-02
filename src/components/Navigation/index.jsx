@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { User, ShoppingCart, ChevronDown, Phone, Mail, Menu, X, Loader } from 'lucide-react';
 import { useAppContext } from '../../contexts/AppContext';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useToggle, useClickAway } from 'react-use';
 
 const Navigation = () => {
-
     const {
         user,
         cartItems,
@@ -13,63 +13,37 @@ const Navigation = () => {
         logout,
         categories
     } = useAppContext();
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef(null);
     const navigate = useNavigate();
     const location = useLocation();
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const [isLoginLoading, setIsLoginLoading] = useState(false);
+    const [isDropdownOpen, toggleDropdown] = useToggle(false);
+    const [isMobileMenuOpen, toggleMobileMenu] = useToggle(false);
+    const [isLoginLoading, toggleLoginLoading] = useToggle(false);
 
+    const dropdownRef = React.useRef(null);
+    useClickAway(dropdownRef, () => {
+        if (isDropdownOpen) toggleDropdown(false);
+    });
 
     const isActive = (path, includeSubPaths = false) => {
-        //console.log(location.pathname);
-        //console.log(path);
-        //if (path === '/') {
-
         if (includeSubPaths) {
             return location.pathname.startsWith(path);
         } else {
             return location.pathname === path;
         }
-        //} else {
-        //  return location.pathname?.startsWith(path);
-        //}
-    };
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsDropdownOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    const handleShopClick = () => {
-        setIsDropdownOpen(!isDropdownOpen);
     };
 
     const handleCategoryClick = (category) => {
-        setIsDropdownOpen(false);
+        toggleDropdown(false);
         navigate(category ? `/shop/${category.code}` : '/shop');
     };
 
-    const toggleMobileMenu = () => {
-        setIsMobileMenuOpen(!isMobileMenuOpen);
-    };
-
     const handleAuth = async () => {
-        setIsLoginLoading(true);
-        console.log('handleAuth');
+        toggleLoginLoading(true);
         try {
             if (user) {
                 await logout();
-                setIsLoginLoading(false);
+                toggleLoginLoading(false);
             } else {
                 loginWithGoogle();
             }
@@ -148,7 +122,7 @@ const Navigation = () => {
                     <li><Link to="/" className={`font-semibold ${isActive('/') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Home</Link></li>
                     <li className="relative group" ref={dropdownRef}>
                         <button
-                            onClick={handleShopClick}
+                            onClick={toggleDropdown}
                             className={`font-semibold ${isActive('/shop', true) ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'} flex items-center`}
                         >
                             Shop
