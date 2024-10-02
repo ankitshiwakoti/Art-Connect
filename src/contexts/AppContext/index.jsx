@@ -1,20 +1,23 @@
-import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
-import { Account, Databases, Client } from 'appwrite';
+import React, { createContext, useState, useContext, useMemo } from 'react';
+import { Account, Databases, Client, Query } from 'appwrite';
 import { AppConfig } from '../../constants/config';
-//import { Cloudinary } from "@cloudinary/url-gen";
-import { categories as categoriesData } from '../../constants/data';
+import { useAsync } from 'react-use';
+
 const AppContext = createContext();
 
-export const useAppContext = () => useContext(AppContext);
+export const useAppContext = (selector) => {
+    const context = useContext(AppContext);
 
+    if (context === undefined) {
+        throw new Error('useAppContext must be used within an AppProvider');
+    }
 
+    return selector ? selector(context) : context;
+};
 
 export const AppProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [cartItems, setCartItems] = useState([{}]);
-    const [categories, setCategories] = useState(categoriesData);
-    //const [cld, setCld] = useState(null);
-
+    const [cartItems, setCartItems] = useState([]);
 
     const client = new Client()
         .setEndpoint(AppConfig.endpoint)
@@ -23,9 +26,7 @@ export const AppProvider = ({ children }) => {
     const account = new Account(client);
     const databases = new Databases(client);
 
-    //const cld = new Cloudinary({ cloud: { cloudName: 'dqaidz667' } });
-
-    const checkUser = useCallback(async () => {
+    const checkUserState = useAsync(async () => {
         try {
             const session = await account.get();
             setUser(session);
@@ -34,18 +35,48 @@ export const AppProvider = ({ children }) => {
         }
     }, []);
 
-    useEffect(() => {
-
-        checkUser();
-        //setCld(new Cloudinary({ cloud: { cloudName: 'dqaidz667' } }));
-        //subscribeToCart();
-    }, [checkUser]);
-
-    
-
-    const loginWithGoogle = async () => {
+    const categoriesState = useAsync(async () => {
         try {
-            await account.createOAuth2Session('google', 'http://localhost:3000', 'http://localhost:3000/login-failed');
+            const response = await databases.listDocuments(
+                AppConfig.databaseId,
+                AppConfig.categoriesCollectionId,
+                [Query.orderAsc("sort")]
+            );
+            return response.documents;
+        } catch (error) {
+            console.error('Failed to fetch categories', error);
+        }
+    }, []);
+
+    const artworksState = useAsync(async () => {
+        try {
+            const response = await databases.listDocuments(
+                AppConfig.databaseId,
+                AppConfig.artworksCollectionId,
+                [Query.orderAsc("sort")]
+            );
+            return response.documents;
+        } catch (error) {
+            console.error('Failed to fetch artworks', error);
+        }
+    }, []);
+
+    const artistsState = useAsync(async () => {
+        try {
+            const response = await databases.listDocuments(
+                AppConfig.databaseId,
+                AppConfig.artistsCollectionId,
+                [Query.orderAsc("sort")]
+            );
+            return response.documents;
+        } catch (error) {
+            console.error('Failed to fetch artists', error);
+        }
+    }, []);
+
+    const loginWithGoogle = () => {
+        try {
+            account.createOAuth2Session('google', process.env.REACT_APP_GOOGLE_OAUTH_REDIRECT_URL, process.env.REACT_APP_GOOGLE_OAUTH_REDIRECT_FAILURE_URL);
         } catch (error) {
             console.error('Google login failed', error);
         }
@@ -60,17 +91,6 @@ export const AppProvider = ({ children }) => {
         }
     };
 
-    const subscribeToCart = () => {
-        const unsubscribe = databases.subscribe(AppConfig.databaseId, AppConfig.cartItemsCollectionId, (response) => {
-            if (response.events.includes('databases.*.collections.*.documents.*')) {
-                // Update cart items when there's a change
-                fetchCartItems();
-            }
-        });
-
-        return unsubscribe;
-    };
-
     const fetchCartItems = async () => {
         try {
             const response = await databases.listDocuments(AppConfig.databaseId, AppConfig.cartItemsCollectionId);
@@ -80,17 +100,24 @@ export const AppProvider = ({ children }) => {
         }
     };
 
-
+    const globalLoading = useMemo(() =>
+        checkUserState.loading ||
+        categoriesState.loading ||
+        artworksState.loading ||
+        artistsState.loading,
+        [checkUserState.loading, categoriesState.loading, artworksState.loading, artistsState.loading]);
 
     const value = {
         user,
         cartItems,
-        categories,
-        //cld,
+        categoriesState,
+        artworksState,
+        artistsState,
+        checkUserState,
         loginWithGoogle,
         logout,
         fetchCartItems,
-        setCategories,
+        globalLoading
     };
 
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

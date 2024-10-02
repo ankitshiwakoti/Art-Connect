@@ -27,6 +27,7 @@ export const artists = [
     {
         id: 1,
         name: 'Emma Thompson',
+        pictureId: 'arts/z1kwfgkevhhamzxfepdg',
         email: 'emma.thompson@art.com',
         phoneNumber: '+1 (555) 123-4567',
         isFeatured: true,
@@ -35,6 +36,7 @@ export const artists = [
     {
         id: 2,
         name: 'Michael Chen',
+        pictureId: 'arts/z1kwfgkevhhamzxfepdg',
         email: 'michael.chen@art.com',
         phoneNumber: '+1 (555) 234-5678',
         isFeatured: true,
@@ -43,6 +45,7 @@ export const artists = [
     {
         id: 3,
         name: 'Sophia Li',
+        pictureId: 'arts/z1kwfgkevhhamzxfepdg',
         email: 'sophia.li@art.com',
         phoneNumber: '+1 (555) 345-6789',
         isFeatured: true,
@@ -51,6 +54,7 @@ export const artists = [
     {
         id: 4,
         name: 'Lucas Dubois',
+        pictureId: 'arts/z1kwfgkevhhamzxfepdg',
         email: 'lucas.dubois@art.com',
         phoneNumber: '+1 (555) 456-7890',
         isFeatured: false,
@@ -59,6 +63,7 @@ export const artists = [
     {
         id: 5,
         name: 'Aisha Patel',
+        pictureId: 'arts/z1kwfgkevhhamzxfepdg',
         email: 'aisha.patel@art.com',
         phoneNumber: '+1 (555) 567-8901',
         isFeatured: false,
@@ -67,6 +72,7 @@ export const artists = [
     {
         id: 6,
         name: 'Daniel Kim',
+        pictureId: 'arts/z1kwfgkevhhamzxfepdg',
         email: 'daniel.kim@art.com',
         phoneNumber: '+1 (555) 678-9012',
         isFeatured: false,

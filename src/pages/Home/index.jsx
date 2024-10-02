@@ -6,12 +6,18 @@ import { AdvancedImage } from '@cloudinary/react';
 // import { gravity } from '@cloudinary/url-gen/qualifiers';
 import { getCldImg } from '../../utils/cloudinary';
 import { cld } from '../../utils/cloudinary';
-import { featuredArtists, featuredArtworks } from '../../constants/data';
+//import { featuredArtists, featuredArtworks } from '../../constants/data';
 import { useAppContext } from '../../contexts/AppContext';
 import { Link } from 'react-router-dom';
 
 function Home() {
-    const { categories } = useAppContext();
+    const { categories, featuredArtists, featuredArtworks } = useAppContext((context) => {
+        return {
+            categories: context.categoriesState.value || [],
+            featuredArtists: context.artistsState.value?.filter(artist => artist.isFeatured) || [],
+            featuredArtworks: context.artworksState.value?.filter(artwork => artwork.isFeatured) || []
+        }
+    });
 
     // Use this sample image or upload your own via the Media Explorer
     const heroImage = cld.image('art-connect-hero')
@@ -80,8 +86,7 @@ function Home() {
                     {featuredArtists.map((artist, index) => (
                         <div key={index} className="text-center group">
                             <div className="overflow-hidden">
-
-                                <AdvancedImage cldImg={getCldImg(artist.masterpieceImageId)} alt={artist.name} className="w-full h-96 object-cover object-cover transform transition duration-300 group-hover:scale-105" />
+                                <AdvancedImage cldImg={getCldImg(artist.masterpiece.imageId)} alt={artist.name} className="w-full h-96 object-cover object-cover transform transition duration-300 group-hover:scale-105" />
                             </div>
                             <h3 className="text-xl font-semibold">{artist.name}</h3>
                         </div>

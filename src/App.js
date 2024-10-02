@@ -6,27 +6,37 @@ import Shop from './pages/Shop';
 import Contact from './pages/Contact';
 import Gallery from './pages/Gallery';
 import Artists from './pages/Artists';
+import Artwork from './pages/Artwork';
 import './App.css';
-import { AppProvider } from './contexts/AppContext';
+import { AppProvider, useAppContext } from './contexts/AppContext';
+import LoadingIndicator from './components/LoadingIndicator';
 
-const Main = () => {
+const MainContent = () => {
 
+  const { globalLoading } = useAppContext();
 
+  if (globalLoading) {
+    return <LoadingIndicator />;
+  }
   return (
-    <main className="flex-grow">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/shop/:category" element={<Shop />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/gallery" element={<Gallery />} />
-        <Route path="/artists" element={<Artists />} />
-        {/* <Route path="/gallery" element={<Gallery />} />
-  <Route path="/artists" element={<Artists />} />
-   */}
-      </Routes>
-    </main>
-  );
+    <Router>
+      <div className="App min-h-screen flex flex-col">
+        <Navigation />
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/shop/:category" element={<Shop />} />
+            <Route path="/artwork/:id" element={<Artwork />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/artists" element={<Artists />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </Router>
+  )
 }
 function App() {
 
@@ -49,13 +59,7 @@ function App() {
     // </div>
 
     <AppProvider>
-      <Router>
-        <div className="App min-h-screen flex flex-col">
-          <Navigation />
-          <Main />
-          <Footer />
-        </div>
-      </Router>
+      <MainContent />
     </AppProvider>
   );
 }
