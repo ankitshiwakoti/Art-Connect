@@ -50,7 +50,7 @@ export const AppProvider = ({ children }) => {
 
     const loginWithGoogle = () => {
         try {
-            account.createOAuth2Session('google', 'http://localhost:3000', 'http://localhost:3000/login-failed');
+            account.createOAuth2Session('google', process.env.REACT_APP_GOOGLE_OAUTH_REDIRECT_URL, process.env.REACT_APP_GOOGLE_OAUTH_REDIRECT_FAILURE_URL);
         } catch (error) {
             console.error('Google login failed', error);
         }

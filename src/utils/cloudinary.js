@@ -2,7 +2,7 @@ import { Cloudinary } from "@cloudinary/url-gen";
 import { auto, scale, crop } from '@cloudinary/url-gen/actions/resize';
 import { autoGravity, focusOn } from '@cloudinary/url-gen/qualifiers/gravity';
 
-export const cld = new Cloudinary({ cloud: { cloudName: 'dqaidz667' } });
+export const cld = new Cloudinary({ cloud: { cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME } });
 
 export const getCldImg = (imageId, width, height) => {
     const img = cld.image(imageId).format('auto').quality('auto');
