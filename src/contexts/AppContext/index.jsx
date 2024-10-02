@@ -5,11 +5,19 @@ import { useAsync } from 'react-use';
 
 const AppContext = createContext();
 
-export const useAppContext = () => useContext(AppContext);
+export const useAppContext = (selector) => {
+    const context = useContext(AppContext);
+
+    if (context === undefined) {
+        throw new Error('useAppContext must be used within an AppProvider');
+    }
+
+    return selector ? selector(context) : context;
+};
 
 export const AppProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [cartItems, setCartItems] = useState([{}]);
+    const [cartItems, setCartItems] = useState([]);
 
     const client = new Client()
         .setEndpoint(AppConfig.endpoint)
@@ -40,6 +48,32 @@ export const AppProvider = ({ children }) => {
         }
     }, []);
 
+    const artworksState = useAsync(async () => {
+        try {
+            const response = await databases.listDocuments(
+                AppConfig.databaseId,
+                AppConfig.artworksCollectionId,
+                [Query.orderAsc("sort")]
+            );
+            return response.documents;
+        } catch (error) {
+            console.error('Failed to fetch artworks', error);
+        }
+    }, []);
+
+    const artistsState = useAsync(async () => {
+        try {
+            const response = await databases.listDocuments(
+                AppConfig.databaseId,
+                AppConfig.artistsCollectionId,
+                [Query.orderAsc("sort")]
+            );
+            return response.documents;
+        } catch (error) {
+            console.error('Failed to fetch artists', error);
+        }
+    }, []);
+
     const loginWithGoogle = () => {
         try {
             account.createOAuth2Session('google', process.env.REACT_APP_GOOGLE_OAUTH_REDIRECT_URL, process.env.REACT_APP_GOOGLE_OAUTH_REDIRECT_FAILURE_URL);
@@ -66,16 +100,23 @@ export const AppProvider = ({ children }) => {
         }
     };
 
-    const globalLoading = useMemo(() => checkUserState.loading || categoriesState.loading, [checkUserState.loading, categoriesState.loading]);
+    const globalLoading = useMemo(() =>
+        checkUserState.loading ||
+        categoriesState.loading ||
+        artworksState.loading ||
+        artistsState.loading,
+        [checkUserState.loading, categoriesState.loading, artworksState.loading, artistsState.loading]);
 
     const value = {
         user,
         cartItems,
-        categories: categoriesState.value || [],
+        categoriesState,
+        artworksState,
+        artistsState,
+        checkUserState,
         loginWithGoogle,
         logout,
         fetchCartItems,
-        isLoadingUser: checkUserState.loading,
         globalLoading
     };
 

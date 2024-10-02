@@ -12,7 +12,15 @@ const Navigation = () => {
         loginWithGoogle,
         logout,
         categories
-    } = useAppContext();
+    } = useAppContext((context) => {
+        return {
+            user: context.user || null,
+            cartItems: context.cartItems || [],
+            loginWithGoogle: context.loginWithGoogle,
+            logout: context.logout,
+            categories: context.categoriesState.value || [],
+        }
+    });
     const navigate = useNavigate();
     const location = useLocation();
 
