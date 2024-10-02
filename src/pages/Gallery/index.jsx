@@ -4,62 +4,119 @@ import { products } from '../../constants/data';
 import { getCldImg } from '../../utils/cloudinary';
 
 function Artists() {
-    // State for managing the modal visibility and current image
     const [isOpen, setIsOpen] = useState(false);
-    const [currentImage, setCurrentImage] = useState(null);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-    // Function to open the modal and set the current image
-    const openModal = (imageId) => {
-        setCurrentImage(getCldImg(imageId));
+    // Open modal with selected image
+    const openModal = (globalIndex) => {
+        setCurrentIndex(globalIndex);
         setIsOpen(true);
     };
 
-    // Function to close the modal
+    // Close modal
     const closeModal = () => {
         setIsOpen(false);
-        setCurrentImage(null);
+    };
+
+    // Navigate to the next image in the gallery
+    const nextImage = () => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
+    };
+
+    // Navigate to the previous image in the gallery
+    const prevImage = () => {
+        setCurrentIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length);
     };
 
     return (
         <div>
             {/* Artworks gallery */}
             <section className="container mx-auto px-4 py-16">
-                <h2 className="text-3xl font-bold text-center mb-2">Artworks Gallery</h2>
-                <div className="bg-black w-12 h-px mx-auto mt-5 mb-8"></div>
+                <h2 className="text-4xl font-bold text-center mb-2 tracking-wide uppercase">Artworks Gallery</h2>
+                <div className="bg-gray-900 w-16 h-1 mx-auto mt-6 mb-12"></div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {products.map((product, index) => (
-                        <div 
-                            key={index} 
-                            className="relative group cursor-pointer overflow-hidden rounded-lg shadow-lg"
-                            onClick={() => openModal(product.imageId)}
-                        >
-                            {/* Artwork image */}
-                            <AdvancedImage cldImg={getCldImg(product.imageId)} alt={product.name} className="w-full h-72 object-cover transform group-hover:scale-105 transition-transform duration-300 ease-in-out" />
-                            
-                            {/* Overlay effect */}
-                            <div className="absolute inset-0 bg-black bg-opacity-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out flex items-center justify-center">
-                                <p className="text-white text-lg font-semibold">{product.name}</p>
-                            </div>
+                {/* FlexMasonry-style layout */}
+                <div className="flex flex-wrap justify-center gap-4">
+                    <div className="flex gap-4">
+                        <div className="flex flex-col gap-4 w-1/3">
+                            {products.filter((_, i) => i % 3 === 0).map((product, index) => (
+                                <div key={index} className="mb-4">
+                                    <AdvancedImage
+                                        cldImg={getCldImg(product.imageId)}
+                                        alt={product.name}
+                                        className="w-full h-auto object-contain cursor-pointer"
+                                        onClick={() => openModal(index * 3)}
+                                    />
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                        <div className="flex flex-col gap-4 w-1/3">
+                            {products.filter((_, i) => i % 3 === 1).map((product, index) => (
+                                <div key={index} className="mb-4">
+                                    <AdvancedImage
+                                        cldImg={getCldImg(product.imageId)}
+                                        alt={product.name}
+                                        className="w-full h-auto object-contain cursor-pointer"
+                                        onClick={() => openModal(index * 3 + 1)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                        <div className="flex flex-col gap-4 w-1/3">
+                            {products.filter((_, i) => i % 3 === 2).map((product, index) => (
+                                <div key={index} className="mb-4">
+                                    <AdvancedImage
+                                        cldImg={getCldImg(product.imageId)}
+                                        alt={product.name}
+                                        className="w-full h-auto object-contain cursor-pointer"
+                                        onClick={() => openModal(index * 3 + 2)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </section>
 
             {/* Modal for image viewer */}
             {isOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 backdrop-blur-lg">
                     <div className="relative">
-                        {/* Close button */}
-                        <button 
-                            className="absolute top-2 right-2 text-white text-2xl font-bold"
-                            onClick={closeModal}
-                        >
-                            &times;
-                        </button>
+                        <AdvancedImage
+                            cldImg={getCldImg(products[currentIndex].imageId)}
+                            alt={products[currentIndex].name}
+                            className="max-w-[80vw] max-h-[70vh] object-contain"
+                        />
+                    </div>
 
-                        {/* Display the selected image */}
-                        <AdvancedImage cldImg={currentImage} alt="Selected artwork" className="max-w-full max-h-screen rounded-lg shadow-lg" />
+                    {/* Close button */}
+                    <button
+                        className="fixed top-8 right-8 text-white text-4xl font-light hover:text-gray-400 transition-transform transform hover:scale-110"
+                        onClick={closeModal}
+                        style={{ background: 'none', padding: '12px' }}
+                    >
+                        &times;
+                    </button>
+
+                    {/* Previous and Next buttons */}
+                    <button
+                        className="fixed left-4 top-1/2 transform -translate-y-1/2 text-white text-3xl font-bold"
+                        onClick={prevImage}
+                        style={{ background: 'none', padding: '20px' }}
+                    >
+                        &#8592;
+                    </button>
+                    <button
+                        className="fixed right-4 top-1/2 transform -translate-y-1/2 text-white text-3xl font-bold"
+                        onClick={nextImage}
+                        style={{ background: 'none', padding: '20px' }}
+                    >
+                        &#8594;
+                    </button>
+
+                    {/* Artist Details section */}
+                    <div className="absolute bottom-0 left-0 w-full text-white p-4">
+                        <p className="text-xl font-semibold">{products[currentIndex].name}</p>
                     </div>
                 </div>
             )}
