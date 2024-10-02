@@ -33,7 +33,7 @@ const Sidebar = ({ currentCategory }) => {
                     <Link to="/shop" className={`text-gray-600 hover:text-gray-800 ${!currentCategory ? 'font-bold' : ''}`}>All</Link>
                 </li>
                 {categories.map((category) => (
-                    <li key={category.id} className="mb-2">
+                    <li key={category.$id} className="mb-2">
                         <Link
                             to={`/shop/${category.code}`}
                             className={`text-gray-600 hover:text-gray-800 ${currentCategory === category.code ? 'font-bold' : ''}`}

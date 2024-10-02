@@ -11,16 +11,16 @@ const Navigation = () => {
         cartItems,
         loginWithGoogle,
         logout,
-        categories,
-        isLoginLoading,
-        setIsLoginLoading,
-        isLoadingUser
+        categories
     } = useAppContext();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const navigate = useNavigate();
     const location = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const [isLoginLoading, setIsLoginLoading] = useState(false);
+
 
     const isActive = (path, includeSubPaths = false) => {
         //console.log(location.pathname);
@@ -96,16 +96,16 @@ const Navigation = () => {
                         </div>
                         <button
                             onClick={handleAuth}
-                            disabled={isLoginLoading || isLoadingUser}
+                            disabled={isLoginLoading}
                             className={`flex items-center text-gray-800 hover:text-black border border-gray-400 rounded-md px-2 py-1 transition duration-300 ease-in-out hover:border-gray-700 ${isLoginLoading ? 'opacity-50 cursor-not-allowed' : ''
                                 }`}
                         >
-                            {isLoginLoading || isLoadingUser ? (
+                            {isLoginLoading ? (
                                 <Loader className="w-5 h-5 animate-spin" />
                             ) : (
                                 <User className="w-5 h-5" />
                             )}
-                            <span className="ml-1">{isLoadingUser ? '' : user ? 'Logout' : 'Login'}</span>
+                            <span className="ml-1">{user ? 'Logout' : 'Login'}</span>
                         </button>
                         <div className="relative">
                             <ShoppingCart className="w-5 h-5" />
@@ -166,7 +166,7 @@ const Navigation = () => {
                                     </button>
                                     {categories.map((category) => (
                                         <button
-                                            key={category.id}
+                                            key={category.$id}
                                             onClick={() => handleCategoryClick(category)}
                                             className={`block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-800 w-full text-left ${isActive(`/shop/${category.code}`) ? 'font-bold' : ''}`}
                                             role="menuitem"
