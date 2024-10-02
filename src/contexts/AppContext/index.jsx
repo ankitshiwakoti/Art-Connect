@@ -13,6 +13,8 @@ export const AppProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [cartItems, setCartItems] = useState([{}]);
     const [categories, setCategories] = useState(categoriesData);
+    const [isLoginLoading, setIsLoginLoading] = useState(false);
+    const [isLoadingUser, setIsLoadingUser] = useState(true);
     //const [cld, setCld] = useState(null);
 
 
@@ -26,11 +28,14 @@ export const AppProvider = ({ children }) => {
     //const cld = new Cloudinary({ cloud: { cloudName: 'dqaidz667' } });
 
     const checkUser = useCallback(async () => {
+        setIsLoadingUser(true);
         try {
             const session = await account.get();
             setUser(session);
         } catch (error) {
-            console.error('User not logged in', error);
+            //console.error('User not logged in', error);
+        } finally {
+            setIsLoadingUser(false);
         }
     }, []);
 
@@ -41,11 +46,11 @@ export const AppProvider = ({ children }) => {
         //subscribeToCart();
     }, [checkUser]);
 
-    
 
-    const loginWithGoogle = async () => {
+
+    const loginWithGoogle = () => {
         try {
-            await account.createOAuth2Session('google', 'http://localhost:3000', 'http://localhost:3000/login-failed');
+            account.createOAuth2Session('google', 'http://localhost:3000', 'http://localhost:3000/login-failed');
         } catch (error) {
             console.error('Google login failed', error);
         }
@@ -91,6 +96,10 @@ export const AppProvider = ({ children }) => {
         logout,
         fetchCartItems,
         setCategories,
+        isLoginLoading,
+        setIsLoginLoading,
+        isLoadingUser,
+        setIsLoadingUser,
     };
 
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

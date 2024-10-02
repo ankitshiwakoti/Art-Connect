@@ -1,12 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { User, ShoppingCart, ChevronDown, Phone, Mail, Menu, X } from 'lucide-react';
+import { User, ShoppingCart, ChevronDown, Phone, Mail, Menu, X, Loader } from 'lucide-react';
 import { useAppContext } from '../../contexts/AppContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const Navigation = () => {
 
-    const { user, cartItems, loginWithGoogle, logout, categories } = useAppContext();
+    const {
+        user,
+        cartItems,
+        loginWithGoogle,
+        logout,
+        categories,
+        isLoginLoading,
+        setIsLoginLoading,
+        isLoadingUser
+    } = useAppContext();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const navigate = useNavigate();
@@ -54,6 +63,23 @@ const Navigation = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
     };
 
+    const handleAuth = async () => {
+        setIsLoginLoading(true);
+        console.log('handleAuth');
+        try {
+            if (user) {
+                await logout();
+                setIsLoginLoading(false);
+            } else {
+                loginWithGoogle();
+            }
+        } catch (error) {
+            console.error('Authentication error:', error);
+        } finally {
+
+        }
+    };
+
     return (
         <header className="bg-white relative z-50">
             <div className="container mx-auto px-4 py-4">
@@ -68,23 +94,19 @@ const Navigation = () => {
                             <Mail className="w-4 h-4 mr-2" />
                             <span>mail@artconnect.ca</span>
                         </div>
-                        {user ? (
-                            <button
-                                onClick={logout}
-                                className="flex items-center text-gray-800 hover:text-black border border-gray-400 rounded-md px-2 py-1 transition duration-300 ease-in-out hover:border-gray-700"
-                            >
-                                <User className="w-5 h-5 mr-2" />
-                                Logout
-                            </button>
-                        ) : (
-                            <button
-                                onClick={loginWithGoogle}
-                                className="flex items-center text-gray-800 hover:text-black border border-gray-400 rounded-md px-2 py-1 transition duration-300 ease-in-out hover:border-gray-700"
-                            >
-                                <User className="w-5 h-5 mr-2" />
-                                Login
-                            </button>
-                        )}
+                        <button
+                            onClick={handleAuth}
+                            disabled={isLoginLoading || isLoadingUser}
+                            className={`flex items-center text-gray-800 hover:text-black border border-gray-400 rounded-md px-2 py-1 transition duration-300 ease-in-out hover:border-gray-700 ${isLoginLoading ? 'opacity-50 cursor-not-allowed' : ''
+                                }`}
+                        >
+                            {isLoginLoading || isLoadingUser ? (
+                                <Loader className="w-5 h-5 animate-spin" />
+                            ) : (
+                                <User className="w-5 h-5" />
+                            )}
+                            <span className="ml-1">{isLoadingUser ? '' : user ? 'Logout' : 'Login'}</span>
+                        </button>
                         <div className="relative">
                             <ShoppingCart className="w-5 h-5" />
                             {cartItems.length > 0 && (
