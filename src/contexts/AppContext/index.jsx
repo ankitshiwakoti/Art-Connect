@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
+import React, { createContext, useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import { Account, Databases, Client } from 'appwrite';
 import { AppConfig } from '../../constants/config';
 //import { Cloudinary } from "@cloudinary/url-gen";
@@ -17,6 +17,7 @@ export const AppProvider = ({ children }) => {
     const [isLoadingUser, setIsLoadingUser] = useState(true);
     //const [cld, setCld] = useState(null);
 
+    const globalLoading = useMemo(() => isLoadingUser, [isLoadingUser]);
 
     const client = new Client()
         .setEndpoint(AppConfig.endpoint)
@@ -100,6 +101,7 @@ export const AppProvider = ({ children }) => {
         setIsLoginLoading,
         isLoadingUser,
         setIsLoadingUser,
+        globalLoading
     };
 
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
