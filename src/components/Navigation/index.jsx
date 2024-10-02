@@ -13,12 +13,12 @@ const Navigation = () => {
     const location = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const isActive = (path) => {
+    const isActive = (path, includeSubPaths = false) => {
         //console.log(location.pathname);
         //console.log(path);
         //if (path === '/') {
 
-        if (path.startsWith('/shop/')) {
+        if (includeSubPaths) {
             return location.pathname.startsWith(path);
         } else {
             return location.pathname === path;
@@ -71,7 +71,7 @@ const Navigation = () => {
                         {user ? (
                             <button
                                 onClick={logout}
-                                className="flex items-center text-gray-800 hover:text-black "
+                                className="flex items-center text-gray-800 hover:text-black border border-gray-400 rounded-md px-2 py-1 transition duration-300 ease-in-out hover:border-gray-700"
                             >
                                 <User className="w-5 h-5 mr-2" />
                                 Logout
@@ -79,7 +79,7 @@ const Navigation = () => {
                         ) : (
                             <button
                                 onClick={loginWithGoogle}
-                                className="flex items-center text-gray-800 hover:text-black"
+                                className="flex items-center text-gray-800 hover:text-black border border-gray-400 rounded-md px-2 py-1 transition duration-300 ease-in-out hover:border-gray-700"
                             >
                                 <User className="w-5 h-5 mr-2" />
                                 Login
@@ -113,7 +113,7 @@ const Navigation = () => {
                 }`}>
                 <ul className="flex flex-col space-y-2 bg-white p-4">
                     <li><Link to="/" className={`font-semibold ${isActive('/') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Home</Link></li>
-                    <li><Link to="/shop" className={`font-semibold ${isActive('/shop') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Shop</Link></li>
+                    <li><Link to="/shop" className={`font-semibold ${isActive('/shop', true) ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Shop</Link></li>
                     <li><Link to="/gallery" className={`font-semibold ${isActive('/gallery') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Gallery</Link></li>
                     <li><Link to="/artists" className={`font-semibold ${isActive('/artists') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Artists</Link></li>
                     <li><Link to="/contact" className={`font-semibold ${isActive('/contact') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Contact</Link></li>
@@ -127,7 +127,7 @@ const Navigation = () => {
                     <li className="relative group" ref={dropdownRef}>
                         <button
                             onClick={handleShopClick}
-                            className={`font-semibold ${isActive('/shop') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'} flex items-center`}
+                            className={`font-semibold ${isActive('/shop', true) ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'} flex items-center`}
                         >
                             Shop
                             <ChevronDown className="w-4 h-4 ml-1" />
