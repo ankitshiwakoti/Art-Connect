@@ -35,7 +35,7 @@ function Artists() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
                     {artists.map((artist, index) => (
                         <div key={index} className="relative overflow-hidden rounded-lg transition duration-300 group">
-                            {/* Artist Masterpiece */}
+                           
                             <Link to={`/Artists/${artist.$id}`}> {/* Link to the artist detail page */}
                                 <div className="overflow-hidden mb-4">
                                     <AdvancedImage

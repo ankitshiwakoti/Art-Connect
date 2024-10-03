@@ -1,139 +1,96 @@
 import React, { useState } from 'react';
 import { AdvancedImage } from '@cloudinary/react';
-import { products } from '../../constants/data';
 import { getCldImg } from '../../utils/cloudinary';
+import Title from '../../components/Title';
+import { useAppContext } from '../../contexts/AppContext'; // Adjust the import path as needed
 
-function Artists() {
+function Gallery() {
+    const { artworks } = useAppContext((context) => ({
+        artworks: context.artworksState.value || []
+    }));
+
     const [isOpen, setIsOpen] = useState(false);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [isZoomed, setIsZoomed] = useState(false); // For zoom functionality
+    const [currentArtwork, setCurrentArtwork] = useState(null);
 
-    // Open modal with selected image
-    const openModal = (globalIndex) => {
-        setCurrentIndex(globalIndex);
+    const openModal = (artwork) => {
+        setCurrentArtwork(artwork);
         setIsOpen(true);
-        setIsZoomed(false); // Reset zoom when opening a new image
     };
 
-    // Close modal
     const closeModal = () => {
         setIsOpen(false);
-        setIsZoomed(false); // Reset zoom when closing the modal
+        setCurrentArtwork(null);
     };
 
-    // Navigate to the next image in the gallery
     const nextImage = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
-        setIsZoomed(false); // Reset zoom when navigating
+        const currentIndex = artworks.findIndex(art => art.$id === currentArtwork.$id);
+        const nextIndex = (currentIndex + 1) % artworks.length;
+        setCurrentArtwork(artworks[nextIndex]);
     };
 
-    // Navigate to the previous image in the gallery
     const prevImage = () => {
-        setCurrentIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length);
-        setIsZoomed(false); // Reset zoom when navigating
-    };
-
-    // Toggle zoom on the image
-    const toggleZoom = () => {
-        setIsZoomed((prevZoom) => !prevZoom);
+        const currentIndex = artworks.findIndex(art => art.$id === currentArtwork.$id);
+        const prevIndex = (currentIndex - 1 + artworks.length) % artworks.length;
+        setCurrentArtwork(artworks[prevIndex]);
     };
 
     return (
         <div>
-            {/* Artworks gallery */}
-            <section className="container mx-auto px-4 py-16">
-                <h2 className="text-4xl font-bold text-center mb-2 tracking-wide uppercase">Artworks Gallery</h2>
-                <div className="bg-gray-900 w-16 h-1 mx-auto mt-6 mb-12"></div>
+            <section className="container mx-auto px-4 pb-16">
+                <Title>Artwork Gallery</Title>
 
-                {/* FlexMasonry-style layout */}
-                <div className="flex flex-wrap justify-center gap-4">
-                    <div className="flex gap-4">
-                        <div className="flex flex-col gap-4 w-1/3">
-                            {products.filter((_, i) => i % 3 === 0).map((product, index) => (
-                                <div key={index} className="mb-4">
-                                    <AdvancedImage
-                                        cldImg={getCldImg(product.imageId)}
-                                        alt={product.name}
-                                        className="w-full h-auto object-contain cursor-pointer"
-                                        onClick={() => openModal(index * 3)}
-                                    />
-                                </div>
-                            ))}
+                <div className="columns-1 md:columns-2 lg:columns-3 gap-4">
+                    {artworks.map((artwork) => (
+                        <div key={artwork.$id} className="mb-4 break-inside-avoid">
+                            <AdvancedImage
+                                cldImg={getCldImg(artwork.imageId)}
+                                alt={artwork.name}
+                                className="w-full h-auto object-contain cursor-pointer"
+                                onClick={() => openModal(artwork)}
+                            />
+                            {/* <p className="mt-2 text-sm font-semibold">{artwork.name}</p>
+                            <p className="text-xs text-gray-600">{artwork.artist.name}</p> */}
                         </div>
-                        <div className="flex flex-col gap-4 w-1/3">
-                            {products.filter((_, i) => i % 3 === 1).map((product, index) => (
-                                <div key={index} className="mb-4">
-                                    <AdvancedImage
-                                        cldImg={getCldImg(product.imageId)}
-                                        alt={product.name}
-                                        className="w-full h-auto object-contain cursor-pointer"
-                                        onClick={() => openModal(index * 3 + 1)}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                        <div className="flex flex-col gap-4 w-1/3">
-                            {products.filter((_, i) => i % 3 === 2).map((product, index) => (
-                                <div key={index} className="mb-4">
-                                    <AdvancedImage
-                                        cldImg={getCldImg(product.imageId)}
-                                        alt={product.name}
-                                        className="w-full h-auto object-contain cursor-pointer"
-                                        onClick={() => openModal(index * 3 + 2)}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </section>
 
-            {/* Modal for image viewer */}
-            {isOpen && (
+            {isOpen && currentArtwork && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 backdrop-blur-lg">
-                    <div className="relative">
-                        {/* Artwork container with zoom feature */}
-                        <div
-                            className={`p-4 bg-black bg-opacity-75 rounded-lg shadow-2xl transition-transform duration-300 ${isZoomed ? 'scale-150' : ''}`}
-                            onClick={toggleZoom}
-                            style={{ cursor: isZoomed ? 'zoom-out' : 'zoom-in' }}
-                        >
+                    <div className="relative w-full h-full flex items-center justify-center">
+                        <div className="p-4 bg-black bg-opacity-75 rounded-lg shadow-2xl">
                             <AdvancedImage
-                                cldImg={getCldImg(products[currentIndex].imageId)}
-                                alt={products[currentIndex].name}
+                                cldImg={getCldImg(currentArtwork.imageId)}
+                                alt={currentArtwork.name}
                                 className="max-w-[80vw] max-h-[70vh] object-contain"
                             />
                         </div>
                     </div>
 
-                    {/* Close button */}
                     <button
-                        className="fixed top-8 right-8 text-white text-4xl font-light hover:text-gray-400 transition-transform transform hover:scale-110"
+                        className="absolute top-4 right-4 text-white text-4xl font-light hover:text-gray-400 transition-transform transform hover:scale-110"
                         onClick={closeModal}
-                        style={{ background: 'none', padding: '12px' }}
                     >
                         &times;
                     </button>
 
-                    {/* Previous and Next buttons */}
                     <button
-                        className="fixed left-4 top-1/2 transform -translate-y-1/2 text-white text-3xl font-bold"
+                        className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-3xl font-bold"
                         onClick={prevImage}
-                        style={{ background: 'none', padding: '20px' }}
                     >
                         &#8592;
                     </button>
                     <button
-                        className="fixed right-4 top-1/2 transform -translate-y-1/2 text-white text-3xl font-bold"
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-3xl font-bold"
                         onClick={nextImage}
-                        style={{ background: 'none', padding: '20px' }}
                     >
                         &#8594;
                     </button>
 
-                    {/* Artist Details section */}
                     <div className="absolute bottom-0 left-0 w-full text-white p-4">
-                        <p className="text-xl font-semibold">{products[currentIndex].name}</p>
+                        <p className="text-xl font-semibold">{currentArtwork.name}</p>
+                        <p className="text-sm">{currentArtwork.artist.name}</p>
+                        {/* <p className="text-xs mt-2">{currentArtwork.description}</p> */}
                     </div>
                 </div>
             )}
@@ -141,4 +98,4 @@ function Artists() {
     );
 }
 
-export default Artists;
+export default Gallery;
