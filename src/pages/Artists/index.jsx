@@ -31,6 +31,7 @@ function Artists() {
             </section> */}
 
             {/* Artists Section */}
+           
             <section className="container mx-auto px-10 pb-16">
                 {/* <h2 className="text-4xl font-bold text-center mb-8">All Artists</h2> */}
                 <Title>All Artists</Title>
