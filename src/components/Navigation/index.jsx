@@ -76,11 +76,11 @@ const Navigation = () => {
                     <div className="flex items-center space-x-6">
                         <div className="hidden md:flex items-center">
                             <Phone className="w-4 h-4 mr-2" />
-                            <span>+1 (204) 456-0150</span>
+                            <a href="tel:+12044560150">+1 (204) 456-0150</a>
                         </div>
                         <div className="hidden md:flex items-center">
                             <Mail className="w-4 h-4 mr-2" />
-                            <span>mail@artconnect.ca</span>
+                            <a href="mailto:mail@artconnect.ca">mail@artconnect.ca</a>
                         </div>
                         <button
                             onClick={handleAuth}
