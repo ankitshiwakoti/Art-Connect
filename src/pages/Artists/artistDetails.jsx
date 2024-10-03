@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useAppContext } from '../../contexts/AppContext';
 import { getCldImg } from '../../utils/cloudinary';
 import { AdvancedImage } from '@cloudinary/react';
+import Title from '../../components/Title';
 
 function ArtistDetail() {
     const { artistId } = useParams();
@@ -11,17 +12,19 @@ function ArtistDetail() {
     }));
 
     const artist = artists.find(artist => artist.$id === artistId);
+    console.log(artist);
 
     if (!artist) {
         return <div>Artist not found</div>;
     }
 
     return (
-        <div className="container mx-auto px-4 py-16">
+        <div className="container mx-auto px-4 pb-8">
+            <Title>{artist.name}</Title>
             {/* Artist Header Section */}
-            <div className="flex mb-8 items-start">
+            <div className="flex flex-col md:flex-row mb-8 items-start">
                 {/* Profile Image */}
-                <div className="w-1/4 flex justify-center items-start">
+                <div className="w-full md:w-1/3 flex justify-center items-start mb-4 md:mb-0">
                     <div className="rounded-full overflow-hidden border-4 border-gray-200 shadow-lg w-64 h-64 flex items-center justify-center">
                         <AdvancedImage
                             cldImg={getCldImg(artist.pictureId)}
@@ -32,51 +35,48 @@ function ArtistDetail() {
                 </div>
 
                 {/* Artist Information */}
-                <div className="w-3/4 pl-10">
-                    <h1 className="text-5xl font-bold text-gray-800 mb-4">{artist.name}</h1>
-                    
+                <div className="w-full text-left md:w-2/3 md:pl-8">
                     {/* About the Artist Section */}
                     <div className="mb-6">
-                        <p className="text-lg text-gray-700">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec eros quis nisi suscipit vestibulum. 
-                            Sed venenatis justo vel turpis faucibus, at suscipit velit ultricies. Suspendisse id neque eget felis volutpat 
-                            aliquet in ac urna. Sed ac metus nec metus cursus euismod. Mauris non ligula ut elit scelerisque commodo. 
-                            Cras vitae fringilla tortor, sit amet feugiat magna. Pellentesque scelerisque, elit nec tristique gravida, 
-                            dui erat facilisis nisl, at vehicula nisl nulla eget mi. Vivamus volutpat vehicula nisl et vehicula.
+                        <p className="text-md text-left text-gray-700">
+                            {artist.description || "Artist bio not available."}
                         </p>
                     </div>
 
-                    {/* Contact Information Section */}
+                    {/* Additional Information */}
                     <div>
-                        <h2 className="text-xl font-semibold text-gray-600 mb-2">Contact Information</h2>
-                        <p className="text-md text-gray-700">Phone: {artist.phoneNumber}</p>
-                        <p className="text-md text-gray-700">
-                            Email: <a href={`mailto:${artist.email}`} className="text-blue-500">{artist.email}</a>
+                        <p className="text-sm text-left text-gray-600">
+                            {artist.email || "Email not available."}
+                        </p>
+                        <p className="text-sm text-left text-gray-600">
+                            {artist.phoneNumber || "Phone number not available."}
                         </p>
                     </div>
                 </div>
             </div>
 
-            {/* Artworks Section */}
-            <div className="mb-8">
-                <h2 className="text-3xl font-bold text-gray-800 mb-6">Artworks by {artist.name}</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Updated Artworks Section */}
+            <section className="container mx-auto px-4 py-16">
+                {/* <h2 className="text-3xl font-bold text-center mb-2">Featured Artworks</h2> */}
+                <div className="bg-black w-12 h-px mx-auto mt-5 mb-8"></div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {artist.artworks.map((artwork, index) => (
-                        <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                            <AdvancedImage
-                                cldImg={getCldImg(artwork.imageId)}
-                                alt={artwork.name}
-                                className="w-full h-48 object-cover"
-                            />
-                            <div className="p-4">
-                                <h3 className="text-lg font-semibold text-gray-800">{artwork.name}</h3>
-                                <p className="text-md text-gray-600">{artwork.description}</p>
-                                <p className="text-lg font-bold text-gray-800">${artwork.price}</p>
+                        <div key={index} className="text-center group">
+                            <div className="overflow-hidden">
+                                <AdvancedImage 
+                                    cldImg={getCldImg(artwork.imageId)} 
+                                    alt={artwork.name} 
+                                    className="w-full h-96 object-cover transform transition duration-300 group-hover:scale-105"
+                                />
                             </div>
+                            <h3 className="text-xl font-semibold mt-4">{artwork.name}</h3>
+                            {/* <p className="text-gray-600">
+                                ${parseFloat(artwork.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+                            </p> */}
                         </div>
                     ))}
                 </div>
-            </div>
+            </section>
         </div>
     );
 }

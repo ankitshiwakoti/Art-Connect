@@ -7,6 +7,7 @@ import { useAppContext } from '../../contexts/AppContext';
 
 import { auto } from '@cloudinary/url-gen/actions/resize';
 import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import Title from '../../components/Title';
 
 function Artists() {
     const { artists } = useAppContext((context) => ({
@@ -21,17 +22,18 @@ function Artists() {
     return (
         <div>
             {/* Hero Section */}
-            <section className="relative h-96 bg-cover bg-center flex items-center justify-center" style={{ backgroundImage: `url(${heroImage.toURL()})` }}>
+            {/* <section className="relative h-96 bg-cover bg-center flex items-center justify-center" style={{ backgroundImage: `url(${heroImage.toURL()})` }}>
                 <div className="bg-black bg-opacity-60 w-full h-full absolute top-0 left-0 z-10"></div>
                 <div className="z-20 text-center text-white">
                     <h1 className="text-5xl font-bold mb-4">Explore the Artists & Artworks</h1>
                     <p className="text-xl">A curated collection of fine artworks from various artists.</p>
                 </div>
-            </section>
+            </section> */}
 
             {/* Artists Section */}
-            <section className="container mx-auto px-4 py-16">
-                <h2 className="text-4xl font-bold text-center mb-8">All Artists</h2>
+            <section className="container mx-auto px-10 pb-16">
+                {/* <h2 className="text-4xl font-bold text-center mb-8">All Artists</h2> */}
+                <Title>All Artists</Title>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
                     {artists.map((artist, index) => (
                         <div key={index} className="relative overflow-hidden rounded-lg transition duration-300 group">
