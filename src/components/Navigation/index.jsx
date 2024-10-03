@@ -132,7 +132,7 @@ const Navigation = () => {
             {/* Mobile menu with animation */}
             <nav className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                 }`}>
-                <ul className="flex flex-col space-y-2 bg-white p-4">
+                <ul className="flex flex-col space-y-2 bg-white pb-4">
                     <li><Link to="/" className={`font-semibold ${isActive('/') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Home</Link></li>
                     <li><Link to="/shop" className={`font-semibold ${isActive('/shop', true) ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Shop</Link></li>
                     <li><Link to="/gallery" className={`font-semibold ${isActive('/gallery') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Gallery</Link></li>
