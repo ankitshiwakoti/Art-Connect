@@ -6,26 +6,36 @@ import { getCldImg } from '../../utils/cloudinary';
 function Artists() {
     const [isOpen, setIsOpen] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isZoomed, setIsZoomed] = useState(false); // For zoom functionality
 
     // Open modal with selected image
     const openModal = (globalIndex) => {
         setCurrentIndex(globalIndex);
         setIsOpen(true);
+        setIsZoomed(false); // Reset zoom when opening a new image
     };
 
     // Close modal
     const closeModal = () => {
         setIsOpen(false);
+        setIsZoomed(false); // Reset zoom when closing the modal
     };
 
     // Navigate to the next image in the gallery
     const nextImage = () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
+        setIsZoomed(false); // Reset zoom when navigating
     };
 
     // Navigate to the previous image in the gallery
     const prevImage = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length);
+        setIsZoomed(false); // Reset zoom when navigating
+    };
+
+    // Toggle zoom on the image
+    const toggleZoom = () => {
+        setIsZoomed((prevZoom) => !prevZoom);
     };
 
     return (
@@ -82,11 +92,18 @@ function Artists() {
             {isOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 backdrop-blur-lg">
                     <div className="relative">
-                        <AdvancedImage
-                            cldImg={getCldImg(products[currentIndex].imageId)}
-                            alt={products[currentIndex].name}
-                            className="max-w-[80vw] max-h-[70vh] object-contain"
-                        />
+                        {/* Artwork container with zoom feature */}
+                        <div
+                            className={`p-4 bg-black bg-opacity-75 rounded-lg shadow-2xl transition-transform duration-300 ${isZoomed ? 'scale-150' : ''}`}
+                            onClick={toggleZoom}
+                            style={{ cursor: isZoomed ? 'zoom-out' : 'zoom-in' }}
+                        >
+                            <AdvancedImage
+                                cldImg={getCldImg(products[currentIndex].imageId)}
+                                alt={products[currentIndex].name}
+                                className="max-w-[80vw] max-h-[70vh] object-contain"
+                            />
+                        </div>
                     </div>
 
                     {/* Close button */}
