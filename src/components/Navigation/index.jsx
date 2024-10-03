@@ -12,7 +12,8 @@ const Navigation = () => {
         cartItems,
         loginWithGoogle,
         logout,
-        categories
+        categories,
+        isLoadingCartItems
     } = useAppContext((context) => {
         return {
             user: context.user || null,
@@ -20,6 +21,7 @@ const Navigation = () => {
             loginWithGoogle: context.loginWithGoogle,
             logout: context.logout,
             categories: context.categoriesState.value || [],
+            isLoadingCartItems: context.isLoadingCartItems
         }
     });
     const navigate = useNavigate();
@@ -96,10 +98,14 @@ const Navigation = () => {
                         <div className="relative">
                             <div className="relative cursor-pointer" onClick={() => toggleCartOpen(true)}>
                                 <ShoppingCartIcon className="w-5 h-5" />
-                                {cartItems.length > 0 && (
-                                    <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                                        {cartItems.length}
-                                    </span>
+                                {isLoadingCartItems ? (
+                                    <Loader className="w-5 h-5 animate-spin absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center" />
+                                ) : (
+                                    cartItems.length > 0 && (
+                                        <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                                            {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
+                                        </span>
+                                    )
                                 )}
                             </div>
                             <ShoppingCart isOpen={isCartOpen} onClose={() => {

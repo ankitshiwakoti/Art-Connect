@@ -1,7 +1,10 @@
 import React, { createContext, useState, useContext, useMemo } from 'react';
-import { Account, Databases, Client, Query } from 'appwrite';
+import { Account, Databases, Client, Query, ID } from 'appwrite';
 import { AppConfig } from '../../constants/config';
-import { useAsync } from 'react-use';
+import useAsyncOnce from '../../hooks/useAsyncOnce';
+import { useAsync, useLocalStorage, useAsyncFn } from 'react-use';
+
+
 
 const AppContext = createContext();
 
@@ -17,7 +20,13 @@ export const useAppContext = (selector) => {
 
 export const AppProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [cartItems, setCartItems] = useState([]);
+    //const [remoteCartItems, setRemoteCartItems] = useState([]);
+    const [localCartItems, setLocalCartItems, removeLocalCartItems] = useLocalStorage('cartItems', []);
+    //const [isLoadingCartItems, setIsLoadingCartItems] = useState(false);
+    //const [refreshCart, setRefreshCart] = useState(0);
+
+
+
 
     const client = new Client()
         .setEndpoint(AppConfig.endpoint)
@@ -26,12 +35,49 @@ export const AppProvider = ({ children }) => {
     const account = new Account(client);
     const databases = new Databases(client);
 
-    const checkUserState = useAsync(async () => {
+    const checkUserState = useAsyncOnce(async () => {
+        let session = undefined
         try {
-            const session = await account.get();
+            session = await account.get();
             setUser(session);
+            //setRemoteCartItems(currentCartItems);
         } catch (error) {
             console.error('User not logged in', error);
+            return;
+        }
+
+        try {
+            const currentCartItems = await fetchCartItems(session);
+            if (localCartItems?.length > 0) {
+                await Promise.all(localCartItems.map(async (localCartItem) => {
+
+                    const foundCartItem = currentCartItems?.find(currentCartItem => currentCartItem.artwork?.$id === localCartItem.artwork?.$id)
+                    if (foundCartItem) {
+                        await databases.updateDocument(
+                            AppConfig.databaseId,
+                            AppConfig.cartItemsCollectionId,
+                            foundCartItem.$id,
+                            {
+                                quantity: localCartItem.quantity + 1
+                            });
+                    } else {
+                        await databases.createDocument(
+                            AppConfig.databaseId,
+                            AppConfig.cartItemsCollectionId,
+                            ID.unique(),
+                            {
+                                userId: (session || user).$id,
+                                quantity: localCartItem.quantity,
+                                artwork: localCartItem.artwork.$id,
+                            }
+                        )
+                    }
+                }));
+                removeLocalCartItems()
+                await fetchCartItems(session);
+            }
+        } catch (error) {
+            console.error('Failed to fetch cart items', error);
         }
     }, []);
 
@@ -74,6 +120,10 @@ export const AppProvider = ({ children }) => {
         }
     }, []);
 
+    //const cartItemsState = use
+
+
+
     const loginWithGoogle = () => {
         try {
             account.createOAuth2Session('google', process.env.REACT_APP_GOOGLE_OAUTH_REDIRECT_URL, process.env.REACT_APP_GOOGLE_OAUTH_REDIRECT_FAILURE_URL);
@@ -86,35 +136,115 @@ export const AppProvider = ({ children }) => {
         try {
             await account.deleteSession('current');
             setUser(null);
+            //setRemoteCartItems([])
+            setLocalCartItems([])
         } catch (error) {
             console.error('Logout failed', error);
         }
     };
 
-    const fetchCartItems = async () => {
+
+    const [remoteCartItemsState, fetchCartItems] = useAsyncFn(async (session) => {
         try {
-            const response = await databases.listDocuments(AppConfig.databaseId, AppConfig.cartItemsCollectionId);
-            setCartItems(response.documents);
+            const response = await databases.listDocuments(
+                AppConfig.databaseId,
+                AppConfig.cartItemsCollectionId,
+                [Query.equal("userId", (session || user).$id), Query.orderAsc("$createdAt")]
+            );
+            return response.documents;
         } catch (error) {
             console.error('Failed to fetch cart items', error);
+            return [];
         }
-    };
+    }, [user]);
 
-    const addToCart = (item) => {
-        setCartItems((prevItems) => [...prevItems, { ...item, quantity: 1 }]);
-    };
+    const cartItems = useMemo(() => {
+        //console.log('cartItems', user, remoteCartItemsState?.value, localCartItems);
+        return user ? remoteCartItemsState?.value || [] : localCartItems;
+    }, [user, remoteCartItemsState, localCartItems]);
 
-    const removeFromCart = (itemId) => {
-        setCartItems((prevItems) => prevItems.filter((item) => item.$id !== itemId));
-    };
+    const [addToCartState, addToCart] = useAsyncFn(async (artwork, quantity = 1) => {
+        try {
+            const cartItem = cartItems.find(item => item.artwork?.$id === artwork.$id);
 
-    const updateQuantity = (itemId, quantity) => {
-        setCartItems((prevItems) =>
-            prevItems.map((item) =>
-                item.$id === itemId ? { ...item, quantity } : item
-            )
-        );
-    };
+            if (cartItem) {
+                if (user) {
+                    await databases.updateDocument(
+                        AppConfig.databaseId,
+                        AppConfig.cartItemsCollectionId,
+                        cartItem.$id,
+                        {
+                            quantity: cartItem.quantity + quantity
+                        }
+                    )
+                    await fetchCartItems();
+                } else {
+                    setLocalCartItems(() => {
+                        //console.log('prevItems', prevItems);
+                        return cartItems.map(item => item.artwork.$id === artwork.$id ? { ...item, quantity: item.quantity + quantity } : item)
+                    });
+                }
+            } else {
+                if (user) {
+                    await databases.createDocument(
+                        AppConfig.databaseId,
+                        AppConfig.cartItemsCollectionId,
+                        ID.unique(),
+                        {
+                            userId: user.$id,
+                            quantity: quantity,
+                            artwork: artwork.$id,
+                        }
+                    );
+                    await fetchCartItems();
+                } else {
+                    setLocalCartItems(() => [...cartItems, { artwork: artwork, quantity: quantity }]);
+                }
+            }
+        } catch (error) {
+            console.error('Failed to add item to cart', error);
+        }
+
+    }, [user, cartItems]);
+
+
+    const [removeFromCartState, removeFromCart] = useAsyncFn(async (cartItem) => {
+        try {
+            if (user) {
+                await databases.deleteDocument(AppConfig.databaseId, AppConfig.cartItemsCollectionId, cartItem.$id);
+                await fetchCartItems();
+            } else {
+                setLocalCartItems(() => cartItems.filter(item => item.artwork.$id !== cartItem.artwork.$id));
+            }
+        } catch (error) {
+            console.error('Failed to remove item from cart', error);
+        }
+    }, [user, cartItems]);
+
+    const [updateQuantityState, updateQuantity] = useAsyncFn(async (cartItem, quantity) => {
+        try {
+            if (user) {
+                await databases.updateDocument(
+                    AppConfig.databaseId,
+                    AppConfig.cartItemsCollectionId,
+                    cartItem.$id,
+                    {
+                        quantity: quantity
+                    }
+                );
+                await fetchCartItems();
+            } else {
+                setLocalCartItems(() => cartItems.map(item => item.artwork.$id === cartItem.artwork.$id ? { ...item, quantity } : item));
+            }
+        } catch (error) {
+            console.error('Failed to update quantity', error);
+        }
+
+    }, [user, cartItems]);
+
+    const isLoadingCartItems = useMemo(() => {
+        return remoteCartItemsState.loading || addToCartState.loading || removeFromCartState.loading || updateQuantityState.loading;
+    }, [remoteCartItemsState, addToCartState, removeFromCartState, updateQuantityState]);
 
     const globalLoading = useMemo(() =>
         checkUserState.loading ||
@@ -132,10 +262,11 @@ export const AppProvider = ({ children }) => {
         checkUserState,
         loginWithGoogle,
         logout,
-        fetchCartItems,
+        //fetchCartItems,
         addToCart,
         removeFromCart,
         updateQuantity,
+        isLoadingCartItems,
         globalLoading
     };
 
