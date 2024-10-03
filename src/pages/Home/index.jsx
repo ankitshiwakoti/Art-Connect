@@ -67,13 +67,13 @@ function Home() {
                 <div className="bg-black w-12 h-px mx-auto mt-5 mb-8"></div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {featuredArtworks.map((artwork, index) => (
-                        <div key={index} className="text-center group">
+                        <Link to={`/artwork/${artwork.$id}`} key={index} className="text-center group">
                             <div className="overflow-hidden">
                                 <AdvancedImage cldImg={getCldImg(artwork.imageId)} alt={artwork.name} className="w-full h-96 object-cover transform transition duration-300 group-hover:scale-105" />
                             </div>
                             <h3 className="text-xl font-semibold">{artwork.name}</h3>
                             <p className="text-gray-600">${parseFloat(artwork.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</p>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </section>
@@ -84,12 +84,12 @@ function Home() {
                 <div className="bg-black w-12 h-px mx-auto mt-5 mb-8"></div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {featuredArtists.map((artist, index) => (
-                        <div key={index} className="text-center group">
+                        <Link to={`/artists/${artist.$id}`} key={index} className="text-center group">
                             <div className="overflow-hidden">
                                 <AdvancedImage cldImg={getCldImg(artist.masterpiece.imageId)} alt={artist.name} className="w-full h-96 object-cover object-cover transform transition duration-300 group-hover:scale-105" />
                             </div>
                             <h3 className="text-xl font-semibold">{artist.name}</h3>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </section>
