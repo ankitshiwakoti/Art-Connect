@@ -30,9 +30,9 @@ const ShoppingCart = ({ isOpen, onClose, anchorRef }) => {
                     <X size={24} />
                 </button>
             </div>
-            <div>
+            <div className="flex flex-col h-full">
                 {cartItems.length === 0 ? (
-                    <div className="flex justify-center items-center h-full py-28">
+                    <div className="flex-grow flex justify-center items-center">
                         <p className="text-center text-gray-800 text-base">No items found.</p>
                     </div>
                 ) : (
@@ -78,7 +78,7 @@ const ShoppingCart = ({ isOpen, onClose, anchorRef }) => {
                                 </div>
                             ))}
                         </div>
-                        <div className="p-4 border-t">
+                        <div className="p-4 border-t mt-auto">
                             <div className="flex justify-between items-center mb-4">
                                 <span className="font-semibold">Subtotal</span>
                                 <span>${calculateSubtotal().toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</span>
