@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useMemo } from 'react';
-import { Account, Databases, Client, Query, ID } from 'appwrite';
+import { Account, Databases, Client, Query, ID, OAuthProvider } from 'appwrite';
 import { AppConfig } from '../../constants/config';
 import useAsyncOnce from '../../hooks/useAsyncOnce';
 import { useAsync, useLocalStorage, useAsyncFn } from 'react-use';
@@ -126,7 +126,10 @@ export const AppProvider = ({ children }) => {
 
     const loginWithGoogle = () => {
         try {
-            account.createOAuth2Session('google', process.env.REACT_APP_GOOGLE_OAUTH_REDIRECT_URL, process.env.REACT_APP_GOOGLE_OAUTH_REDIRECT_FAILURE_URL);
+            account.createOAuth2Session(OAuthProvider.Google,
+                process.env.REACT_APP_GOOGLE_OAUTH_REDIRECT_URL,
+                process.env.REACT_APP_GOOGLE_OAUTH_REDIRECT_FAILURE_URL
+            );
         } catch (error) {
             console.error('Google login failed', error);
         }
