@@ -58,7 +58,7 @@ function Artwork() {
     };
 
     return (
-        <div className="container mx-auto px-4 pb-16">
+        <div className="container mx-auto pb-16">
             <Title>{artwork.name}</Title>
             <div className="max-w-[95%] mx-auto pt-8">
                 <div className="flex flex-col lg:flex-row">

@@ -36,7 +36,7 @@ function Gallery() {
 
     return (
         <div>
-            <section className="container mx-auto px-4 pb-16">
+            <section className="container mx-auto pb-16">
                 <Title>Artwork Gallery</Title>
 
                 <div className="columns-1 md:columns-2 lg:columns-3 gap-4">

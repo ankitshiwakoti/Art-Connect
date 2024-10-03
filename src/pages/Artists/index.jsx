@@ -31,30 +31,30 @@ function Artists() {
             </section> */}
 
             {/* Artists Section */}
-            <section className="container mx-auto px-10 pb-16">
+            <section className="container mx-auto pb-16">
                 {/* <h2 className="text-4xl font-bold text-center mb-8">All Artists</h2> */}
                 <Title>All Artists</Title>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
                     {artists.map((artist, index) => (
                         <div key={index} className="relative overflow-hidden rounded-lg transition duration-300 group">
-                           
+
                             <Link to={`/Artists/${artist.$id}`}> {/* Link to the artist detail page */}
                                 <div className="overflow-hidden mb-4">
                                     <AdvancedImage
-                                        cldImg={getCldImg(artist.masterpiece.imageId)} 
-                                        alt={artist.masterpiece.name} 
-                                        className="w-full h-72 object-cover transition duration-300 transform group-hover:scale-105" 
+                                        cldImg={getCldImg(artist.masterpiece.imageId)}
+                                        alt={artist.masterpiece.name}
+                                        className="w-full h-72 object-cover transition duration-300 transform group-hover:scale-105"
                                     />
                                 </div>
                             </Link>
-                            
+
                             {/* Artist Profile Section */}
                             <div className="flex items-center mt-2">
                                 <div className="w-12 h-12 rounded-full overflow-hidden">
-                                    <AdvancedImage 
-                                        cldImg={getCldImg(artist.pictureId)} 
-                                        alt={artist.name} 
-                                        className="w-full h-full object-cover" 
+                                    <AdvancedImage
+                                        cldImg={getCldImg(artist.pictureId)}
+                                        alt={artist.name}
+                                        className="w-full h-full object-cover"
                                     />
                                 </div>
                                 <div className="ml-2">

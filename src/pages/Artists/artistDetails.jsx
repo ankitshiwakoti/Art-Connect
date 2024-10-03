@@ -19,7 +19,7 @@ function ArtistDetail() {
     }
 
     return (
-        <div className="container mx-auto px-4 pb-8">
+        <div className="container mx-auto pb-8">
             <Title>{artist.name}</Title>
             {/* Artist Header Section */}
             <div className="flex flex-col md:flex-row mb-8 items-start">
@@ -63,9 +63,9 @@ function ArtistDetail() {
                     {artist.artworks.map((artwork, index) => (
                         <div key={index} className="text-center group">
                             <div className="overflow-hidden">
-                                <AdvancedImage 
-                                    cldImg={getCldImg(artwork.imageId)} 
-                                    alt={artwork.name} 
+                                <AdvancedImage
+                                    cldImg={getCldImg(artwork.imageId)}
+                                    alt={artwork.name}
                                     className="w-full h-96 object-cover transform transition duration-300 group-hover:scale-105"
                                 />
                             </div>

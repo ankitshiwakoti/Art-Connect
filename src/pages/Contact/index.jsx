@@ -3,7 +3,7 @@ import Title from '../../components/Title';
 
 function Contact() {
     return (
-        <div className="container mx-auto px-4 pb-16">
+        <div className="container mx-auto pb-16">
             <Title>Contact</Title>
             <h1 className="text-4xl font-bold text-center mb-8">Stay In Touch</h1>
             <div className="max-w-lg mx-auto">
