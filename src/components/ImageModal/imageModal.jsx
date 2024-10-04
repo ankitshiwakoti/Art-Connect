@@ -1,5 +1,4 @@
 import React from 'react';
-import { AdvancedImage } from '@cloudinary/react';
 import { getCldImg } from '../../utils/cloudinary';
 
 function ImageModal({ isOpen, closeModal, prevImage, nextImage, currentIndex, products, isZoomed, toggleZoom }) {
@@ -14,8 +13,8 @@ function ImageModal({ isOpen, closeModal, prevImage, nextImage, currentIndex, pr
                     onClick={toggleZoom}
                     style={{ cursor: isZoomed ? 'zoom-out' : 'zoom-in' }}
                 >
-                    <AdvancedImage
-                        cldImg={getCldImg(products[currentIndex].imageId)}
+                    <img
+                        src={getCldImg(products[currentIndex].imageId).toURL()}
                         alt={products[currentIndex].name}
                         className="max-w-[80vw] max-h-[70vh] object-contain"
                     />

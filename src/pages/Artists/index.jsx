@@ -40,8 +40,8 @@ function Artists() {
 
                             <Link to={`/Artists/${artist.$id}`}> {/* Link to the artist detail page */}
                                 <div className="overflow-hidden mb-4">
-                                    <AdvancedImage
-                                        cldImg={getCldImg(artist.masterpiece.imageId)}
+                                    <img
+                                        src={getCldImg(artist.masterpiece.imageId).toURL()}
                                         alt={artist.masterpiece.name}
                                         className="w-full h-72 object-cover transition duration-300 transform group-hover:scale-105"
                                     />
@@ -51,8 +51,8 @@ function Artists() {
                             {/* Artist Profile Section */}
                             <div className="flex items-center mt-2">
                                 <div className="w-12 h-12 rounded-full overflow-hidden">
-                                    <AdvancedImage
-                                        cldImg={getCldImg(artist.pictureId)}
+                                    <img
+                                        src={getCldImg(artist.pictureId).toURL()}
                                         alt={artist.name}
                                         className="w-full h-full object-cover"
                                     />

@@ -3,7 +3,7 @@ import { Account, Databases, Client, Query, ID, OAuthProvider, Functions } from 
 import { AppConfig } from '../../constants/config';
 import useAsyncOnce from '../../hooks/useAsyncOnce';
 import { useAsync, useLocalStorage, useAsyncFn } from 'react-use';
-//import { getCldImg, preloadImages } from '../../utils/cloudinary';
+import { getCldImg, preloadImages } from '../../utils/cloudinary';
 
 
 const AppContext = createContext();
@@ -102,7 +102,7 @@ export const AppProvider = ({ children }) => {
                 [Query.orderAsc("sort")]
             );
             const results = response.documents;
-            //await preloadImages(results.map((artwork) => getCldImg(artwork.imageId)));
+            await preloadImages([getCldImg(process.env.REACT_APP_HERO_IMAGE_ID, 1920), ...results.map((artwork) => getCldImg(artwork.imageId))]);
             return results;
         } catch (error) {
             console.error('Failed to fetch artworks', error);
@@ -116,7 +116,9 @@ export const AppProvider = ({ children }) => {
                 AppConfig.artistsCollectionId,
                 [Query.orderAsc("sort")]
             );
-            return response.documents;
+            const results = response.documents;
+            await preloadImages(results.map((artist) => getCldImg(artist.pictureId)));
+            return results;
         } catch (error) {
             console.error('Failed to fetch artists', error);
         }

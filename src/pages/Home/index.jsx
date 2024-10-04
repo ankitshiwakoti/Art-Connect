@@ -1,11 +1,6 @@
 import React from 'react';
-import { auto } from '@cloudinary/url-gen/actions/resize';
-import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
-import { AdvancedImage } from '@cloudinary/react';
 // import { FocusOn } from "@cloudinary/url-gen/qualifiers/focusOn"
-// import { gravity } from '@cloudinary/url-gen/qualifiers';
 import { getCldImg } from '../../utils/cloudinary';
-import { cld } from '../../utils/cloudinary';
 //import { featuredArtists, featuredArtworks } from '../../constants/data';
 import { useAppContext } from '../../contexts/AppContext';
 import { Link } from 'react-router-dom';
@@ -20,10 +15,7 @@ function Home() {
     });
 
     // Use this sample image or upload your own via the Media Explorer
-    const heroImage = cld.image(process.env.REACT_APP_HERO_IMAGE_ID || 'art-connect-hero')
-        .format('auto') // Optimize delivery by resizing and applying auto-format and auto-quality
-        .quality('auto')
-        .resize(auto().gravity(autoGravity())); // Transform the image: auto-crop to square aspect_ratio
+    const heroImage = getCldImg(process.env.REACT_APP_HERO_IMAGE_ID || 'art-connect-hero', 1920); // Transform the image: auto-crop to square aspect_ratio
 
     //console.log(optimizeUrl);
     return (
@@ -39,7 +31,14 @@ function Home() {
                 </div> */}
             {/* </section> */}
 
-            <section className="relative h-176 bg-cover bg-center flex items-center justify-center" style={{ backgroundImage: `url(${heroImage.toURL()})` }}>
+            <section className="relative h-176 bg-cover bg-center flex items-center justify-center" >
+                <div className="absolute inset-0">
+                    <img
+                        src={heroImage.toURL()}
+                        alt="Hero"
+                        className="w-full h-full object-cover"
+                    />
+                </div>
                 <div className="bg-black bg-opacity-60 w-full h-full absolute top-0 left-0 z-10"></div>
                 <div className="z-20 text-center text-white">
                     <h1 className="text-5xl font-bold mb-4 opacity-0 translate-y-10 transition-all duration-1000 ease-out animate-fadeInUp">
@@ -69,7 +68,7 @@ function Home() {
                     {featuredArtworks.map((artwork, index) => (
                         <Link to={`/artwork/${artwork.$id}`} key={index} className="text-center group">
                             <div className="overflow-hidden">
-                                <AdvancedImage cldImg={getCldImg(artwork.imageId)} alt={artwork.name} className="w-full h-96 object-cover transform transition duration-300 group-hover:scale-105" />
+                                <img src={getCldImg(artwork.imageId).toURL()} alt={artwork.name} className="w-full h-96 object-cover transform transition duration-300 group-hover:scale-105" />
                             </div>
                             <h3 className="text-xl font-semibold">{artwork.name}</h3>
                             <p className="text-gray-600">${parseFloat(artwork.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</p>
@@ -86,7 +85,7 @@ function Home() {
                     {featuredArtists.map((artist, index) => (
                         <Link to={`/artists/${artist.$id}`} key={index} className="text-center group">
                             <div className="overflow-hidden">
-                                <AdvancedImage cldImg={getCldImg(artist.masterpiece.imageId)} alt={artist.name} className="w-full h-96 object-cover object-cover transform transition duration-300 group-hover:scale-105" />
+                                <img src={getCldImg(artist.masterpiece.imageId).toURL()} alt={artist.name} className="w-full h-96 object-cover object-cover transform transition duration-300 group-hover:scale-105" />
                             </div>
                             <h3 className="text-xl font-semibold">{artist.name}</h3>
                         </Link>

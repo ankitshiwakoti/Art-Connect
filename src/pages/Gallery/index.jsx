@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AdvancedImage } from '@cloudinary/react';
 import { getCldImg } from '../../utils/cloudinary';
 import Title from '../../components/Title';
 import { useAppContext } from '../../contexts/AppContext'; // Adjust the import path as needed
@@ -42,8 +41,8 @@ function Gallery() {
                 <div className="columns-1 md:columns-2 lg:columns-3 gap-4">
                     {artworks.map((artwork) => (
                         <div key={artwork.$id} className="mb-4 break-inside-avoid">
-                            <AdvancedImage
-                                cldImg={getCldImg(artwork.imageId)}
+                            <img
+                                src={getCldImg(artwork.imageId).toURL()}
                                 alt={artwork.name}
                                 className="w-full h-auto object-contain cursor-pointer"
                                 onClick={() => openModal(artwork)}
@@ -59,8 +58,8 @@ function Gallery() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 backdrop-blur-lg">
                     <div className="relative w-full h-full flex items-center justify-center">
                         <div className="p-4 bg-black bg-opacity-75 rounded-lg shadow-2xl">
-                            <AdvancedImage
-                                cldImg={getCldImg(currentArtwork.imageId)}
+                            <img
+                                src={getCldImg(currentArtwork.imageId).toURL()}
                                 alt={currentArtwork.name}
                                 className="max-w-[80vw] max-h-[70vh] object-contain"
                             />

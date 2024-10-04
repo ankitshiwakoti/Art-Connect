@@ -6,7 +6,6 @@ import { Gallery, Item } from 'react-photoswipe-gallery';
 import 'photoswipe/dist/photoswipe.css';
 import { Link, useParams } from 'react-router-dom';
 import { Loader } from 'lucide-react';
-import { AdvancedImage } from '@cloudinary/react';
 function Artwork() {
     const { id } = useParams();
     const { artwork, addToCart, isLoadingCartItems } = useAppContext((context) => ({
@@ -33,7 +32,7 @@ function Artwork() {
     }
 
     //const imageUrl = getCldImg(artwork.imageId).toURL();
-    const fullImage = getCldImg(artwork.imageId);
+    const fullImage = getCldImg(artwork.imageId, null, null);
     const thumbnailImage = getCldImg(artwork.imageId);
 
     const pswpOptions = {
@@ -73,8 +72,8 @@ function Artwork() {
                             >
                                 {({ ref, open }) => (
                                     <div ref={ref} >
-                                        <AdvancedImage
-                                            cldImg={thumbnailImage}
+                                        <img
+                                            src={thumbnailImage.toURL()}
                                             alt={artwork.name}
                                             className="w-full h-auto object-contain"
                                             onClick={open} style={{ cursor: 'pointer' }}

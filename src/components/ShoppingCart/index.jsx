@@ -2,7 +2,6 @@ import React from 'react';
 import { X } from 'lucide-react';
 import { useAppContext } from '../../contexts/AppContext';
 import { getCldImg } from '../../utils/cloudinary';
-import { AdvancedImage } from '@cloudinary/react';
 
 const ShoppingCart = ({ isOpen, onClose, anchorRef }) => {
     const { cartItems, removeFromCart, updateQuantity, isLoadingCartItems } = useAppContext();
@@ -46,8 +45,8 @@ const ShoppingCart = ({ isOpen, onClose, anchorRef }) => {
 
                                 {cartItems.map((item, index) => (
                                     <div key={index} className="flex items-center">
-                                        <AdvancedImage
-                                            cldImg={getCldImg(item.artwork.imageId)}
+                                        <img
+                                            src={getCldImg(item.artwork.imageId).toURL()}
                                             alt={item.artwork.name}
                                             className="w-16 h-16 object-cover mr-4"
                                         />
