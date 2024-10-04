@@ -3,7 +3,7 @@ import { Account, Databases, Client, Query, ID, OAuthProvider } from 'appwrite';
 import { AppConfig } from '../../constants/config';
 import useAsyncOnce from '../../hooks/useAsyncOnce';
 import { useAsync, useLocalStorage, useAsyncFn } from 'react-use';
-
+//import { getCldImg, preloadImages } from '../../utils/cloudinary';
 
 
 const AppContext = createContext();
@@ -101,7 +101,9 @@ export const AppProvider = ({ children }) => {
                 AppConfig.artworksCollectionId,
                 [Query.orderAsc("sort")]
             );
-            return response.documents;
+            const results = response.documents;
+            //await preloadImages(results.map((artwork) => getCldImg(artwork.imageId)));
+            return results;
         } catch (error) {
             console.error('Failed to fetch artworks', error);
         }

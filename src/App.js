@@ -11,6 +11,7 @@ import ArtistDetail from './pages/Artists/artistDetails';
 import './App.css';
 import { AppProvider, useAppContext } from './contexts/AppContext';
 import LoadingIndicator from './components/LoadingIndicator';
+import ScrollToTop from './components/ScrollToTop';
 
 const MainContent = () => {
 
@@ -21,6 +22,7 @@ const MainContent = () => {
   }
   return (
     <Router>
+      <ScrollToTop />
       <div className="App min-h-screen flex flex-col">
         <Navigation />
         <main className="flex-grow">

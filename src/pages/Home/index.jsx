@@ -20,7 +20,7 @@ function Home() {
     });
 
     // Use this sample image or upload your own via the Media Explorer
-    const heroImage = cld.image('art-connect-hero')
+    const heroImage = cld.image(process.env.REACT_APP_HERO_IMAGE_ID || 'art-connect-hero')
         .format('auto') // Optimize delivery by resizing and applying auto-format and auto-quality
         .quality('auto')
         .resize(auto().gravity(autoGravity())); // Transform the image: auto-crop to square aspect_ratio

@@ -96,13 +96,13 @@ const Navigation = () => {
                             <span className="ml-1">{user ? 'Logout' : 'Login'}</span>
                         </button>
                         <div className="relative">
-                            <div className="relative cursor-pointer" onClick={() => toggleCartOpen(true)}>
+                            <div className="relative cursor-pointer select-none" onClick={() => toggleCartOpen()}>
                                 <ShoppingCartIcon className="w-5 h-5" />
                                 {isLoadingCartItems ? (
                                     <Loader className="w-5 h-5 animate-spin absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center" />
                                 ) : (
                                     cartItems.length > 0 && (
-                                        <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                                        <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center select-none">
                                             {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
                                         </span>
                                     )
@@ -133,22 +133,22 @@ const Navigation = () => {
             <nav className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                 }`}>
                 <ul className="flex flex-col space-y-2 bg-white pb-4">
-                    <li><Link to="/" className={`font-semibold ${isActive('/') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Home</Link></li>
-                    <li><Link to="/shop" className={`font-semibold ${isActive('/shop', true) ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Shop</Link></li>
-                    <li><Link to="/gallery" className={`font-semibold ${isActive('/gallery') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Gallery</Link></li>
-                    <li><Link to="/artists" className={`font-semibold ${isActive('/artists') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Artists</Link></li>
-                    <li><Link to="/contact" className={`font-semibold ${isActive('/contact') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Contact</Link></li>
+                    <li><Link to="/" className={`font-semibold select-none ${isActive('/') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Home</Link></li>
+                    <li><Link to="/shop" className={`font-semibold select-none ${isActive('/shop', true) ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Shop</Link></li>
+                    <li><Link to="/gallery" className={`font-semibold select-none ${isActive('/gallery') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Gallery</Link></li>
+                    <li><Link to="/artists" className={`font-semibold select-none ${isActive('/artists') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Artists</Link></li>
+                    <li><Link to="/contact" className={`font-semibold select-none ${isActive('/contact') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Contact</Link></li>
                 </ul>
             </nav>
 
             {/* Desktop menu */}
             <nav className="hidden md:block md:p-4">
                 <ul className="flex space-x-8 justify-center font-poppins">
-                    <li><Link to="/" className={`font-semibold ${isActive('/') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Home</Link></li>
-                    <li className="relative group" ref={dropdownRef}>
+                    <li><Link to="/" className={`font-semibold select-none ${isActive('/') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Home</Link></li>
+                    <li className="relative group select-none" ref={dropdownRef}>
                         <button
                             onClick={toggleDropdown}
-                            className={`font-semibold ${isActive('/shop', true) ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'} flex items-center`}
+                            className={`font-semibold select-none ${isActive('/shop', true) ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'} flex items-center`}
                         >
                             Shop
                             <ChevronDown className="w-4 h-4 ml-1" />
@@ -177,9 +177,9 @@ const Navigation = () => {
                             </div>
                         )}
                     </li>
-                    <li><Link to="/gallery" className={`font-semibold ${isActive('/gallery') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Gallery</Link></li>
-                    <li><Link to="/artists" className={`font-semibold ${isActive('/artists') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Artists</Link></li>
-                    <li><Link to="/contact" className={`font-semibold ${isActive('/contact') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Contact</Link></li>
+                    <li><Link to="/gallery" className={`font-semibold select-none ${isActive('/gallery') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Gallery</Link></li>
+                    <li><Link to="/artists" className={`font-semibold select-none ${isActive('/artists') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Artists</Link></li>
+                    <li><Link to="/contact" className={`font-semibold select-none ${isActive('/contact') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Contact</Link></li>
                 </ul>
             </nav>
         </header>

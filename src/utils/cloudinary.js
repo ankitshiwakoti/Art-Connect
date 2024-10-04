@@ -18,3 +18,16 @@ export const getCldImg = (imageId, width, height) => {
 
     return img;
 }
+
+// export const preloadImages = (cldImgs) => {
+//     return Promise.all(
+//         cldImgs.map((cldImg) => {
+//             return new Promise((resolve, reject) => {
+//                 const img = new Image();
+//                 img.src = cldImg.toURL();
+//                 img.onload = resolve;
+//                 img.onerror = reject;
+//             });
+//         })
+//     );
+// };
