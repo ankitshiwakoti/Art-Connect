@@ -47,7 +47,7 @@ const ShoppingCart = ({ isOpen, onClose, anchorRef }) => {
                                     <div key={index} className="flex items-center">
                                         <img
                                             src={getCldImg(item.artwork.imageId).toURL()}
-                                            alt={item.artwork.name}
+                                            alt=""
                                             className="w-16 h-16 object-cover mr-4"
                                         />
                                         <div className="flex-grow">

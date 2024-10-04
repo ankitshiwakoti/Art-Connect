@@ -15,7 +15,7 @@ function ImageModal({ isOpen, closeModal, prevImage, nextImage, currentIndex, pr
                 >
                     <img
                         src={getCldImg(products[currentIndex].imageId).toURL()}
-                        alt={products[currentIndex].name}
+                        alt=""
                         className="max-w-[80vw] max-h-[70vh] object-contain"
                     />
                 </div>

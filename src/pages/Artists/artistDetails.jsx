@@ -30,7 +30,7 @@ function ArtistDetail() {
                     <div className="rounded-full overflow-hidden border-4 border-gray-200 shadow-lg w-64 h-64 flex items-center justify-center">
                         <img
                             src={getCldImg(artist.pictureId).toURL()}
-                            alt={artist.name}
+                            alt=""
                             className="w-full h-full object-cover"
                         />
                     </div>
@@ -86,7 +86,7 @@ function ArtistDetail() {
                                 <div className="overflow-hidden">
                                     <img
                                         src={getCldImg(artwork.imageId).toURL()}
-                                        alt={artwork.name}
+                                        alt=""
                                         className="w-full h-96 object-cover transform transition duration-300 group-hover:scale-105"
                                     />
                                 </div>

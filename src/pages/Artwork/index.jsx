@@ -74,7 +74,7 @@ function Artwork() {
                                     <div ref={ref} >
                                         <img
                                             src={thumbnailImage.toURL()}
-                                            alt={artwork.name}
+                                            alt=""
                                             className="w-full h-auto object-contain"
                                             onClick={open} style={{ cursor: 'pointer' }}
                                         />

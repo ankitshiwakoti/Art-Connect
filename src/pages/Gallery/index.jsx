@@ -43,7 +43,7 @@ function Gallery() {
                         <div key={artwork.$id} className="mb-4 break-inside-avoid">
                             <img
                                 src={getCldImg(artwork.imageId).toURL()}
-                                alt={artwork.name}
+                                alt=""
                                 className="w-full h-auto object-contain cursor-pointer"
                                 onClick={() => openModal(artwork)}
                             />
@@ -60,7 +60,7 @@ function Gallery() {
                         <div className="p-4 bg-black bg-opacity-75 rounded-lg shadow-2xl">
                             <img
                                 src={getCldImg(currentArtwork.imageId).toURL()}
-                                alt={currentArtwork.name}
+                                alt=""
                                 className="max-w-[80vw] max-h-[70vh] object-contain"
                             />
                         </div>

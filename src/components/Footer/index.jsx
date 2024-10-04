@@ -4,7 +4,7 @@ import { Facebook, Instagram, Twitter } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-8">
+    <footer className="bg-gray-950 text-white py-8">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
           <nav className="w-full md:w-auto">
@@ -17,13 +17,13 @@ const Footer = () => {
           <div className="flex flex-col items-center md:items-end space-y-4 md:space-y-2">
             <span className="text-sm italic">Follow us on:</span>
             <div className="flex space-x-4">
-              <a href="#" className="hover:text-gray-300"><Facebook size={20} /></a>
-              <a href="#" className="hover:text-gray-300"><Instagram size={20} /></a>
-              <a href="#" className="hover:text-gray-300"><Twitter size={20} /></a>
+              <span className="hover:text-gray-300 cursor-pointer"><Facebook size={20} /></span>
+              <span className="hover:text-gray-300 cursor-pointer"><Instagram size={20} /></span>
+              <span className="hover:text-gray-300 cursor-pointer"><Twitter size={20} /></span>
             </div>
           </div>
         </div>
-        <div className="mt-8 text-center md:text-left text-sm text-gray-500">
+        <div className="mt-8 text-center md:text-left text-sm text-gray-300">
           © 2024 ArtConnect | All rights reserved
         </div>
       </div>

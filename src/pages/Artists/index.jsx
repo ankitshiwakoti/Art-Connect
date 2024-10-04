@@ -42,7 +42,7 @@ function Artists() {
                                 <div className="overflow-hidden mb-4">
                                     <img
                                         src={getCldImg(artist.masterpiece.imageId).toURL()}
-                                        alt={artist.masterpiece.name}
+                                        alt=""
                                         className="w-full h-72 object-cover transition duration-300 transform group-hover:scale-105"
                                     />
                                 </div>
@@ -53,7 +53,7 @@ function Artists() {
                                 <div className="w-12 h-12 rounded-full overflow-hidden">
                                     <img
                                         src={getCldImg(artist.pictureId).toURL()}
-                                        alt={artist.name}
+                                        alt=""
                                         className="w-full h-full object-cover"
                                     />
                                 </div>

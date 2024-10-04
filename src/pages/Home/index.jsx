@@ -35,7 +35,7 @@ function Home() {
                 <div className="absolute inset-0">
                     <img
                         src={heroImage.toURL()}
-                        alt="Hero"
+                        alt=""
                         className="w-full h-full object-cover"
                     />
                 </div>
@@ -68,7 +68,7 @@ function Home() {
                     {featuredArtworks.map((artwork, index) => (
                         <Link to={`/artwork/${artwork.$id}`} key={index} className="text-center group">
                             <div className="overflow-hidden">
-                                <img src={getCldImg(artwork.imageId).toURL()} alt={artwork.name} className="w-full h-96 object-cover transform transition duration-300 group-hover:scale-105" />
+                                <img src={getCldImg(artwork.imageId).toURL()} alt="" className="w-full h-96 object-cover transform transition duration-300 group-hover:scale-105" />
                             </div>
                             <h3 className="text-xl font-semibold">{artwork.name}</h3>
                             <p className="text-gray-600">${parseFloat(artwork.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</p>
@@ -85,7 +85,7 @@ function Home() {
                     {featuredArtists.map((artist, index) => (
                         <Link to={`/artists/${artist.$id}`} key={index} className="text-center group">
                             <div className="overflow-hidden">
-                                <img src={getCldImg(artist.masterpiece.imageId).toURL()} alt={artist.name} className="w-full h-96 object-cover object-cover transform transition duration-300 group-hover:scale-105" />
+                                <img src={getCldImg(artist.masterpiece.imageId).toURL()} alt="" className="w-full h-96 object-cover object-cover transform transition duration-300 group-hover:scale-105" />
                             </div>
                             <h3 className="text-xl font-semibold">{artist.name}</h3>
                         </Link>
