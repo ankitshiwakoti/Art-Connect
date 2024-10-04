@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useMemo } from 'react';
-import { Account, Databases, Client, Query, ID, OAuthProvider } from 'appwrite';
+import { Account, Databases, Client, Query, ID, OAuthProvider, Functions } from 'appwrite';
 import { AppConfig } from '../../constants/config';
 import useAsyncOnce from '../../hooks/useAsyncOnce';
 import { useAsync, useLocalStorage, useAsyncFn } from 'react-use';
@@ -258,6 +258,26 @@ export const AppProvider = ({ children }) => {
         artistsState.loading,
         [checkUserState.loading, categoriesState.loading, artworksState.loading, artistsState.loading]);
 
+    const sendEmail = async (formData) => {
+        const functions = new Functions(client);
+        try {
+            const response = await functions.createExecution(
+                process.env.REACT_APP_APPWRITE_EMAIL_FUNCTION_ID,
+                JSON.stringify(formData)
+            );
+            if (response.status === 'completed' && JSON.parse(response.responseBody).success === true) {
+                //console.log('Email sent successfully');
+                //console.log('Email response:', response);
+                return JSON.parse(response.responseBody);
+            } else {
+                throw new Error('Failed to send email');
+            }
+        } catch (error) {
+            console.error('Error sending email:', error);
+            throw error;
+        }
+    };
+
     const value = {
         user,
         cartItems,
@@ -272,7 +292,8 @@ export const AppProvider = ({ children }) => {
         removeFromCart,
         updateQuantity,
         isLoadingCartItems,
-        globalLoading
+        globalLoading,
+        sendEmail
     };
 
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
