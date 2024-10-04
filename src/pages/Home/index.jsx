@@ -52,7 +52,7 @@ function Home() {
 
             {/* Categories */}
             {/* Categories */}
-            <section className="container mx-auto px-4 py-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <section className="container mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {categories.map((category, index) => (
                     <Link key={index} to={`/shop/${category.code}`} className="bg-gray-900 text-white p-8 text-center hover:bg-gray-800 transition duration-300">
                         <h2 className="text-2xl">{category.name}</h2>

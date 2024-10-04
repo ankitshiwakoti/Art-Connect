@@ -143,12 +143,12 @@ const Navigation = () => {
 
             {/* Desktop menu */}
             <nav className="hidden md:block md:p-4">
-                <ul className="flex space-x-8 justify-center font-poppins">
-                    <li><Link to="/" className={`font-semibold select-none ${isActive('/') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Home</Link></li>
+                <ul className="flex space-x-8 justify-center font-serif">
+                    <li><Link to="/" className={`font-bold select-none ${isActive('/') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Home</Link></li>
                     <li className="relative group select-none" ref={dropdownRef}>
                         <button
                             onClick={toggleDropdown}
-                            className={`font-semibold select-none ${isActive('/shop', true) ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'} flex items-center`}
+                            className={`font-bold select-none ${isActive('/shop', true) ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'} flex items-center`}
                         >
                             Shop
                             <ChevronDown className="w-4 h-4 ml-1" />
@@ -177,9 +177,9 @@ const Navigation = () => {
                             </div>
                         )}
                     </li>
-                    <li><Link to="/gallery" className={`font-semibold select-none ${isActive('/gallery') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Gallery</Link></li>
-                    <li><Link to="/artists" className={`font-semibold select-none ${isActive('/artists') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Artists</Link></li>
-                    <li><Link to="/contact" className={`font-semibold select-none ${isActive('/contact') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Contact</Link></li>
+                    <li><Link to="/gallery" className={`font-bold select-none ${isActive('/gallery') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Gallery</Link></li>
+                    <li><Link to="/artists" className={`font-bold select-none ${isActive('/artists') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Artists</Link></li>
+                    <li><Link to="/contact" className={`font-bold select-none ${isActive('/contact') ? 'text-gray-950' : 'text-gray-600 hover:text-gray-950'}`}>Contact</Link></li>
                 </ul>
             </nav>
         </header>
