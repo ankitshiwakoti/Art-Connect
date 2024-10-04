@@ -48,6 +48,10 @@ function ArtistDetail() {
                         <p className="text-sm text-left text-gray-600">
                             {artist.email || "Email not available."}
                         </p>
+                    
+{/* 
+                        <p className="text-md text-gray-700">Phone: {artist.phoneNumber}</p> */}
+                       
                         <p className="text-sm text-left text-gray-600">
                             {artist.phoneNumber || "Phone number not available."}
                         </p>
