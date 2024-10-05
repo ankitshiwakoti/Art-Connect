@@ -42,7 +42,7 @@ export const AppProvider = ({ children }) => {
             setUser(session);
             //setRemoteCartItems(currentCartItems);
         } catch (error) {
-            console.error('User not logged in', error);
+            //console.error('User not logged in', error);
             return;
         }
 
