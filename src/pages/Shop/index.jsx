@@ -76,7 +76,7 @@ function Shop() {
 
     return (
 
-        <div className="container mx-auto py-1">
+        <div className="container mx-auto pb-4">
             <Title>Shop</Title>
             <div className="flex flex-col md:flex-row">
                 <Sidebar currentCategory={category} />
